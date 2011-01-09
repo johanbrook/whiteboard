@@ -1,0 +1,121 @@
+/**
+*	The compulsory reset file. It's the HTML5 one (duh .. ) with some added material.
+*/
+
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0b1 | 201101 . Modified by Johan 2011-01-03 */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+	position: relative;
+}
+/* Enable absolute positioned elements inside these ones: */
+div,a,p,ul,li{
+	position: relative;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+hr {
+	display:block; 
+	height:1px; 
+	border:0; 
+	border-top:1px solid #cccccc; 
+	margin: 28px 0 27px;
+	padding:0; 
+}
+
+label, a img {
+	cursor: pointer;
+}
+strong	{
+	font-weight: bold;
+}
+em {
+	font-style: italic;
+}
+small {
+	font-size: 85%;
+}
+
+abbr[title],dfn[title] { 
+	border-bottom:1px dotted #888; 
+	cursor:help; 
+}
+
+/* remember to define visible focus styles! 
+:focus {
+	outline: ?????;
+} */
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+input[type="radio"] { vertical-align: text-bottom; }
+input[type="checkbox"] { vertical-align: bottom; *vertical-align: baseline; }
+
+pre{
+	display: block;
+	white-space: pre;           /* CSS 2.0 */
+	white-space: pre-wrap;      /* CSS 2.1 */
+	white-space: pre-line;      /* CSS 3.0 */
+	white-space: -pre-wrap;     /* Opera 4-6 */
+	white-space: -o-pre-wrap;   /* Opera 7 */
+	white-space: -moz-pre-wrap; /* Mozilla */
+	white-space: -hp-pre-wrap;  /* HP Printers */
+	word-wrap: break-word;      /* IE 5+ */
+	line-height: 1.5em;	
+}
+
+sup	{
+	vertical-align: super; font-size: smaller;
+}
+sub{
+	vertical-align: sub; font-size: smaller;
+}

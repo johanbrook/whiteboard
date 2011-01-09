@@ -1,0 +1,27 @@
+/*-  STYLES FOR A RESPONSIVE DESIGN
+----------------------------------------------------------------------*/
+
+/* Feel free to add more media queries. These are the guys I usually use */
+
+
+/* For iPhone 4. Remember to use 'background-size' do define the original dimensions */
+@media only screen and (-webkit-min-device-pixel-ratio: 2){
+	
+}
+
+/* iPad */
+
+@media only screen and (max-width: 1024px) {
+	
+	section, article, aside, .block, p, h1, h2{
+		@include block;
+	}
+
+}
+
+
+/* iPhone and other smartphones */
+
+@media only screen and (max-width: 480px) {
+	
+}

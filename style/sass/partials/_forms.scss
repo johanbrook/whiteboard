@@ -1,0 +1,45 @@
+/* Search form */
+
+input[type="search"]{
+	
+}
+
+
+
+label{
+	font-family: $sans;
+	font-weight: bold;
+	font-size: 0.9em;
+	cursor: pointer;
+	display: block;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="email"],
+textarea{
+	// Comment if you want Safari to apply native OS controls
+	-webkit-appearance: none;
+	-webkit-font-smoothing: antialiased;
+	border: 1px solid #aaa;
+	@include border-radius(3px);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0.3em;
+	
+	&:focus{
+		
+	}
+}
+
+textarea{
+	line-height: $lineheight;
+}
+
+
+/* Define error styles: */
+
+
+
+
