@@ -6,20 +6,7 @@ get_header(); ?>
 
 	<?php while (have_posts()) : the_post(); ?>
 	
-		<article class="post">
-		
-			<h1>
-				<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
-			</h1>
-			
-			<time datetime="<?php the_time('c') ?>" pubdate><?php the_time('F jS, Y') ?></time>
-			
-			<div class="post-text">	
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
-			</div>
-			
-		
-		</article>
+		<?php get_template_part("partials/post");?>
 
 	<?php endwhile; ?>
 	

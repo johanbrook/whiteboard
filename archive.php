@@ -33,17 +33,7 @@
 
 		<?php while (have_posts()) : the_post(); ?>
 			
-		<article <?php post_class() ?>>
-		
-			<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
-			<time datetime="<?php the_time('c') ?>" pubdate><?php the_time('F j, Y') ?></time>
-			
-			
-			<footer>
-				<?php the_tags('Tags: ', ', ', '.'); ?> Posted in <?php the_category(', ') ?> | <?php edit_post_link('Edit', '', ' | '); ?>					
-			</footer>
-		
-		</article>
+			<?php get_template_part("partials/post");?>
 
 		<?php endwhile; ?>
 

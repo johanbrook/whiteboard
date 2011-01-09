@@ -4,7 +4,7 @@ get_header(); ?>
 
 	<?php if (have_posts()) : ?>
 
-		<h1>Search Results</h1>
+		<h1>Search Results – found <?php echo $wp_query->found_posts;?> posts</h1>
 
 		<?php if (show_posts_nav()) : ?>
 		<nav>
@@ -17,19 +17,7 @@ get_header(); ?>
 
 		<?php while (have_posts()) : the_post(); ?>
 
-			<article <?php post_class() ?>>
-				
-				<h2>
-					<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
-					</h2>
-				
-				<time datetime="<?php the_time('c') ?>" pubdate><?php the_time('F j, Y') ?></time>
-				
-				<footer>
-					
-				</footer>
-			
-			</article>
+			<?php get_template_part("partials/post");?>
 
 		<?php endwhile; ?>
 
