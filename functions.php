@@ -96,7 +96,7 @@ if ( !is_admin() ) {
 if ( function_exists('register_sidebar') ) {
 	register_sidebar(array(
 		'name' => "Global sidebar",
-		'id' => 'global'
+		'id' => 'global',
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget' => '</section',
 		'before_title' => '<h2>',
