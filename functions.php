@@ -165,93 +165,6 @@ register_taxonomy("portfolio-type", "portfolio",
 register_nav_menu( 'subnav', 'Sub navigation on pages' );
 
 
-/* ADD META BOX FOR CUSTOM FIELDS */
-/*-----------------------------------------*/
-
-$prefix = 'jb_';
-
-$meta_box = array(
-    'id' => 'year-box',
-    'title' => 'År',
-    'page' => 'portfolio',
-    'context' => 'side',
-    'priority' => 'low',
-    'fields' => array(
-        array(
-            'name' => 'År',
-            'desc' => 'När arbetet utfördes',
-            'id' => $prefix . 'text',
-            'type' => 'text',
-            'std' => date("Y")
-        )
-    )
-);
-
-add_action('admin_menu', 'dyluni_add_box');
-
-// Add meta box
-function dyluni_add_box() {
-    global $meta_box;
-    
-    add_meta_box($meta_box['id'], $meta_box['title'], 'mytheme_show_box', $meta_box['page'], $meta_box['context'], $meta_box['priority']);
-}
-
-// Callback function to show fields in meta box
-function mytheme_show_box() {
-    global $meta_box, $post;
-    
-    // Use nonce for verification
-    echo '<input type="hidden" name="mytheme_meta_box_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
-
-    foreach ($meta_box['fields'] as $field) :?>
-
-		<?php $meta = get_post_meta($post->ID, $field['id'], true);?>
-		
-		<input type="text" name="<?php echo $field["id"];?>" id="<?php echo $field["id"];?>" value="<?php if($meta) echo $meta; else echo $field['std'];?>" size="30" />
-		
-		<p class="howto"><?php echo $field["desc"]; ?></p>
-		
-	<?php endforeach; ?>
-		
-<?php }
-
-add_action('save_post', 'mytheme_save_data');
-
-// Save data from meta box
-function mytheme_save_data($post_id) {
-    global $meta_box;
-    
-    // verify nonce
-    if (!wp_verify_nonce($_POST['mytheme_meta_box_nonce'], basename(__FILE__))) {
-        return $post_id;
-    }
-
-    // check autosave
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return $post_id;
-    }
-
-    // check permissions
-    if ('page' == $_POST['post_type']) {
-        if (!current_user_can('edit_page', $post_id)) {
-            return $post_id;
-        }
-    } elseif (!current_user_can('edit_post', $post_id)) {
-        return $post_id;
-    }
-    
-    foreach ($meta_box['fields'] as $field) {
-        $old = get_post_meta($post_id, $field['id'], true);
-        $new = $_POST[$field['id']];
-        
-        if ($new && $new != $old) {
-            update_post_meta($post_id, $field['id'], $new);
-        } elseif ('' == $new && $old) {
-            delete_post_meta($post_id, $field['id'], $old);
-        }
-    }
-}
-
 
 /* HELPER FUNCTIONS
 ----------------------------------------*/
@@ -338,94 +251,6 @@ function is_child(){
 	}
 }
 
-
-/**
-*	Experimental function. I honestly use WP 3.0's menus more nowadays.
-*/
-
-function list_page_tree(){
-	global $post;
-	global $wp_query;
-	
-	if(empty($wp_query->post->post_parent))
-		$parent = $wp_query->post->ID;
-	else
-		$parent = $wp_query->post->post_parent;
-	
-	$pages = get_pages("child_of=".$parent);
-	if($pages){
-		
-		if(is_page($parent))
-			$current = 'class="current"';
-		
-	echo '<li '. $current .'><a href="'. get_permalink($parent) .'">'. get_the_title($parent) .'</a></li>';
-		
-	foreach($pages as $item):?>
-		
-		<li <?php if(is_page($item->ID)) echo 'class="current"'; ?>><a href="<?php echo get_permalink($item->ID); ?>"><?php echo get_the_title($item->ID);?></a></li>
-	<?php endforeach;
-	}
-}
-
-
-
-/**
-*	Returns (or echoes) the number of posts per category.
-*/
-
-function posts_per_category($id, $echo = true) {
-	global $wpdb;
-	$query = "SELECT count FROM ".$wpdb->term_taxonomy." WHERE term_id = ".$id;
-	$num = $wpdb->get_col($query);
-	
-	if($echo)
-		echo $num[0]; 
-	else
-		return $num[0];
-}
-
-/**
-* Extracts the images or only the text in a post
-* @args $type - "image" or "text". 
-*/
-
-function jb_the_content($type = "text", $echo=true){
-	global $post;
-	$content = $post->post_content;
-	$content = apply_filters("the_content", $content);
-	
-	if($type == "image"){
-		preg_match_all('/<img[^>]+>/', $content, $matches);
-		$ret = multi_implode("", $matches);
-		#$ret = $matches;		
-	}else if($type == "text"){
-		$ret = preg_replace('/<p><img[^>]+><\/p>/', "", $content);
-	}
-	
-	if($echo)
-		echo $ret;
-	else
-		return $ret;
-}
-
-/**
-*	Acts as the PHP function implode(), but with improved support for multi-dimensional arrays.
-*/
-function multi_implode($glue, $pieces){
-    $string='';
-    
-    if(is_array($pieces)){
-        reset($pieces);
-        while(list($key,$value)=each($pieces)){
-            $string .= $glue.multi_implode($glue, $value);
-        }
-    }
-    else{
-        return $pieces."\n";
-    }
-    
-    return trim($string, $glue);
-}
 
 
 
@@ -574,7 +399,7 @@ function show_posts_nav() {
 function add_google_analytics() {
 	echo '<script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script>'.PHP_EOL;
 	echo '<script type="text/javascript">'.PHP_EOL;
-	echo 'var pageTracker = _gat._getTracker("UA-4471592-8");'.PHP_EOL;
+	echo 'var pageTracker = _gat._getTracker("XX-XXXXXXX-X");'.PHP_EOL;
 	echo 'pageTracker._trackPageview();'.PHP_EOL;
 	echo '</script>'.PHP_EOL;
 }
@@ -583,7 +408,7 @@ function add_google_analytics() {
 function add_google_analytics_async(){
 	echo "<script type='text/javascript'>".PHP_EOL."
 		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-4471592-8']);
+		_gaq.push(['_setAccount', 'XX-XXXXXXX-X']);
 		_gaq.push(['_trackPageview']);
 		(function() {
 		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
