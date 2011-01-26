@@ -7,11 +7,16 @@
 
 automatic_feed_links();
 add_editor_style("style/css/editor-style.css");
-add_theme_support( 'post-thumbnails' );
+
+add_theme_support("post-thumbnails");
+add_theme_support("menus");
 
 # Replace with your own dimensions
 
 set_post_thumbnail_size(588, 364, true);
+
+# Uncomment in production! Adds Google Analytics to the site.
+#add_action('wp_head', 'add_google_analytics_async');
 
 
 
@@ -34,12 +39,12 @@ add_action('init', 'remove_head_links');
 #
 # Replace with your own values/dimensions!
 
-define('HEADER_IMAGE', '%s/style/images/hero.png');
-define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 980 ) );
-define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 365 ) );
-define('NO_HEADER_TEXT', true);
+#define('HEADER_IMAGE', '%s/style/images/hero.png');
+#define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 980 ) );
+#define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 365 ) );
+#define('NO_HEADER_TEXT', true);
 
-add_custom_image_header( '', 'admin_header_style' );
+#add_custom_image_header( '', 'admin_header_style' );
 
 
 // Add custom post types to RSS feed. Normally only regular posts are included.
@@ -140,6 +145,7 @@ function register_my_posttypes(){
 /* TAXONOMIES */
 /*-----------------------------------------*/
 
+/*
 $labels = array(
 	"singular_name" => "Type",
 	"search_items" => "Search types",
@@ -162,12 +168,12 @@ register_taxonomy("portfolio-type", "portfolio",
 		"rewrite" => array("slug" => "type"),
 		"capabilities" => array("manage_terms", "edit_terms", "delete_terms")
 	));
-
+*/
 
 /* MENUS
 ----------------------------------------*/
 
-register_nav_menu( 'subnav', 'Sub navigation on pages' );
+#register_nav_menu( 'subnav', 'Sub navigation on pages' );
 
 
 
@@ -422,6 +428,5 @@ function add_google_analytics_async(){
 		  })();
 		</script>".PHP_EOL;
 }
-# Uncomment in production!
-#add_action('wp_head', 'add_google_analytics_async');	
+	
 
