@@ -82,6 +82,11 @@ if ( !is_admin() ) {
    wp_enqueue_script('jquery-smoothscroll');
    
 
+   # The grid overlay stuff
+
+   wp_register_script("hashgrid", ($style_dir . "jquery.hashgrid.js"), array("jquery"), "5", true);
+   wp_enqueue_script("hashgrid");
+
 	# And finally the local functions Javascript file
 	
    wp_register_script('dyluni', $style_dir ."dyluni.js", array("jquery"), "1.0", true);

@@ -32,7 +32,9 @@ $page_width_spec: 980;
 	-moz-column-count: $count; -moz-column-gap: 1.5em;
 	column-count: $count; column-gap: 1.5em;
 	
-	& > p{
+	& > p,
+	& > ul,
+	& > ol{
 		position: static;		// Boy, it took me long time to figure this out.
 	}
 }
@@ -64,6 +66,7 @@ $page_width_spec: 980;
 @mixin border-radius($args){
 	-webkit-border-radius: $args;
 	-moz-border-radius: $args;
+	-ms-border-radius: $args;
 	border-radius: $args;
 }
 
@@ -111,7 +114,7 @@ $page_width_spec: 980;
 
 @mixin hover($dir: bottom){
 	&:hover{
-		background-position-y: #{$dir} !important;
+		background-position-y: #{$dir};
 	}
 }
 
@@ -126,7 +129,7 @@ $page_width_spec: 980;
 	content: "";
 }
 
-// Instead of calculating the percentages in responsive web design, just include "fluid(300)" (or any other property as the other parameter)
+// Instead of calculating the percentages in responsive web design, just include "fluid(width)" (or any other property as the other parameter)
 @mixin fluid($width, $property: width, $tot: $page_width_spec){
 	#{$property}: ($width/$page_width_spec)*100%;
 }
@@ -162,12 +165,7 @@ $page_width_spec: 980;
 }
 
 /* Clearing stuff */
-.clear{
-	clear: both; 
-	display: block; 
-	height: 1px; 
-	margin: -1px 0 0 0;
-}
+.clear{clear: both; display: block; height: 1px; margin: -1px 0 0 0;}
 
 .clearfix{
 	@include clearfix;
@@ -182,8 +180,7 @@ $page_width_spec: 980;
    Solution from: j.mp/visuallyhidden - Thanks Jonathan Neal! */
 .visuallyhidden { position:absolute !important;   
   clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-  clip: rect(1px, 1px, 1px, 1px); 
-}
+  clip: rect(1px, 1px, 1px, 1px); }
  
 /* Hide visually and from screenreaders, but maintain layout */
 .invisible { visibility: hidden; }

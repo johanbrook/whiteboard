@@ -11,7 +11,6 @@
 	</footer>
 
 	
-</div><!-- .wrapper end -->
 		
 <?php wp_footer(); ?>
 

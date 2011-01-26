@@ -40,8 +40,7 @@
 </head>
 
 <body <?php body_class(); ?> id="www-website-com">
-
-<div class="wrapper">	
+	
 	<header role="banner">
 		<hgroup>
 			<h1><a href="<?php echo get_option('home'); ?>/"><?php bloginfo('name'); ?></a></h1>
