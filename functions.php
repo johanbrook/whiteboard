@@ -65,8 +65,8 @@ if ( !is_admin() ) {
 	
 	# I use a local copy of jQuery in dev mode. To fetch from Google, uncomment next line and remove the local line
 	
-   #wp_register_script('jquery', ("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"), false, "1.4.2", true);
-   wp_register_script('jquery', ($style_dir . "jquery-1.4.2.min.js"), false, "1.4.2", true);
+   #wp_register_script('jquery', ("http://code.jquery.com/jquery.min.js"), false, "1.4.4", true);
+   wp_register_script('jquery', ($style_dir . "jquery.min.js"), false, "1.4.4", true);
    wp_enqueue_script('jquery');
    
 	# Handy jQuery library for all sorts of things. See more at http://flowplayer.org/tools/index.html

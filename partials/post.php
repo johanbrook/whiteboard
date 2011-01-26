@@ -1,6 +1,6 @@
 <?php
 /**
-*	The main blog post template. Used in single.php and index.php
+*	The main blog post template. Used in single.php, archive.php and index.php
 *	In here you can customize what's shown if Conditionals tags (like 'if(is_single())').
 */
 
