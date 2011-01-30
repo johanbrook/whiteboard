@@ -12,7 +12,9 @@
 			<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
 		</h1>
 		
-		<p class="meta"><time datetime="<?php the_time('c') ?>" pubdate><?php the_time('F j, Y') ?></time>
+		<p class="meta">
+			<time datetime="<?php the_time('c') ?>" pubdate><?php the_time('F j, Y') ?></time>
+		</p>
 	</header>
 	
 	
