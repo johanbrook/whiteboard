@@ -5,6 +5,21 @@
  * Written by Johan Brook except where noted.
  */
 
+
+
+/* CONFIGURATION
+------------------------------------------------------*/
+
+/* Google Analytics */
+
+# Fill in your Google Analytics tracking code:
+define("GOOGLE_ANALYTICS_ID", "XX-XXXXXXX-X");
+
+# Adds asynchronous Google Analytics to the <head> tag. Uncomment in production!:
+
+#add_action('wp_head', 'add_google_analytics_async');
+
+
 automatic_feed_links();
 add_editor_style("style/css/editor-style.css");
 
@@ -15,10 +30,9 @@ add_theme_support("menus");
 
 set_post_thumbnail_size(588, 364, true);
 
-# Uncomment in production! Adds Google Analytics to the site.
-#add_action('wp_head', 'add_google_analytics_async');
 
-
+/* end
+------------------------------------------------------*/
 
 // Clean up the <head>
 function remove_head_links() {
@@ -61,42 +75,48 @@ function myfeed_request($qv) {
 add_filter('request', 'myfeed_request');
 
 
-/*	JAVASCRIPT registrations. Hate this bulky shit.
+/*	JAVASCRIPT registrations.
 -------------------------------------------------*/
-
 if ( !is_admin() ) {
-	$style_dir = get_bloginfo("stylesheet_directory")."/style/js/";
-   wp_deregister_script('jquery');
+	$dir = get_bloginfo("stylesheet_directory")."/style/js/";
+	wp_deregister_script('jquery');
+
+	# I use a local copy of jQuery in dev mode.
+
+	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"), false, "1.5", true);
+	#wp_register_script('jquery', ($dir . "jquery-1.5.min.js"), false, "1.5", true);
+	wp_enqueue_script('jquery');
+}
+
+add_action("wp_footer", "load_scripts");
+
+function load_scripts(){
+	$dir = get_bloginfo("stylesheet_directory")."/style/js/";
+
 	
-	# I use a local copy of jQuery in dev mode. To fetch from Google, uncomment next line and remove the local line
+	$scripts = array(
+			array("dir" => $dir."jquery.hashgrid.js", 				"load" => "all"),
+			array("dir" => $dir."jquery.smoothscroll.min.js",		"load" => "all"),
+			array("dir" => $dir."dyluni.js",						"load" => "all")
+	);
 	
-   #wp_register_script('jquery', ("http://code.jquery.com/jquery.min.js"), false, "1.4.4", true);
-   wp_register_script('jquery', ($style_dir . "jquery.min.js"), false, "1.4.4", true);
-   wp_enqueue_script('jquery');
-   
-	# Handy jQuery library for all sorts of things. See more at http://flowplayer.org/tools/index.html
-	# The included file is only a build of the Tab feature, I don't need the whole package sometimes.
-	# Visit the site to build your own
+	foreach($scripts as $key => $script){
+		if($script["load"] == "front"){
+			if(is_front_page()){
+				renderJS($script["dir"]);
+			}
+		}else if($script["load"] != "all" && is_page($script["load"])){
+			renderJS($script["dir"]);
+		}else if($script["load"] == "all"){
+			renderJS($script["dir"]);
+		}
+		
+	}
 
-   #wp_register_script('jquery-tools', ($style_dir . "jquery.tools.min.js"), array("jquery"), "1.2.5", true);
-   #wp_enqueue_script('jquery-tools');
+}
 
-	# For smooth scrolling on local anchors
-	
-   wp_register_script('jquery-smoothscroll', ($style_dir . "jquery.smoothscroll.min.js"), array("jquery"), "1.3", true);
-   wp_enqueue_script('jquery-smoothscroll');
-   
-
-   # The grid overlay stuff
-
-   wp_register_script("hashgrid", ($style_dir . "jquery.hashgrid.js"), array("jquery"), "5", true);
-   wp_enqueue_script("hashgrid");
-
-	# And finally the local functions Javascript file
-	
-   wp_register_script('dyluni', $style_dir ."dyluni.js", array("jquery"), "1.0", true);
-   wp_enqueue_script('dyluni');
-
+function renderJS($dir){
+	echo '<script type="text/javascript" src="'. $dir .'"></script>'.PHP_EOL;
 }
 
 
@@ -139,7 +159,7 @@ function register_my_posttypes(){
 		"supports" => array("title", "editor", "custom-fields", "thumbnail", "excerpt")
 	);
 	
-	register_post_type("portfolio", $portfolio_args);
+	#register_post_type("portfolio", $portfolio_args);
 }
 
 /* TAXONOMIES */
@@ -185,6 +205,15 @@ register_taxonomy("portfolio-type", "portfolio",
 */
 function link_to($page){
 	echo get_bloginfo("url")."/$page";
+}
+
+
+/**
+*	Makes it easier to use the img tag in HTML without having to write the whole bloginfo mess:
+*/
+
+function img($filename){
+	echo get_bloginfo("stylesheet_directory")."/style/images/".$filename;
 }
 
 
@@ -263,51 +292,52 @@ function is_child(){
 }
 
 
+/**
+*	Simple function to check if there are shortcodes in the post's content:
+*/
+
+function has_shortcode($shortcode){
+	global $post;
+	if(strrpos($post->post_content, $shortcode))
+		return $shortcode;
+	else if(strrpos($post->post_content, $shortcode) === 0)
+		return $shortcode;
+	else
+		return false;
+}
+
 
 
 /**
-*	Make the main heading in users' RSS reader lead to the attached link (custom field: Link).
-*	Be sure to change the custom field to the name of what you're using.
-*/
-
-function jb_permalink_rss($content) {
-	global $wp_query;
-	$postid = $wp_query->post->ID;
-	$link = get_post_meta($postid, 'Link', true);
-	
-	if(is_feed()) {
-		if($link !== '') {
-			$content = $link;
-		}
-		else {
-			$content = get_permalink($postid);
-		}
-	}
-	
-	return $content;
+ * Modifies a string to remove all non ASCII characters and spaces.
+ */
+function slugify($text) {	
+    // replace non letter or digits by -
+    $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+ 
+    // trim
+    $text = trim($text, '-');
+ 
+    // transliterate
+    if (function_exists('iconv'))
+    {
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    }
+ 
+    // lowercase
+    $text = strtolower($text);
+ 
+    // remove unwanted characters
+    $text = preg_replace('~[^-\w]+~', '', $text);
+ 
+    if (empty($text))
+    {
+        return 'n-a';
+    }
+ 
+    return $text;
 }
 
-/**
-*	If a custom field Link is attached, show a permalink at the bottom
-*/
-function jb_add_permalink_to_content($content){
-	global $wp_query;
-	$postid = $wp_query->post->ID;
-	$link = get_post_meta($postid, 'Link', true);
-	
-	if(is_feed()){
-		if($link !== ''){
-			$content = $content . "<p><a href='". get_permalink($postid) ."' title='permalink'>Permalink ›</a></p>\n";
-		}else{
-			$content = $content;
-		}
-	}
-	
-	return $content;
-}
-add_filter('the_permalink_rss', 'jb_permalink_rss');
-add_filter('the_content', 'jb_add_permalink_to_content');
-add_filter('the_excerpt_rss', 'jb_add_permalink_to_content');
 
 
 
@@ -406,20 +436,11 @@ function show_posts_nav() {
 /* GOOGLE ANALYTICS
 --------------------------------------*/
 
-# The old way
-function add_google_analytics() {
-	echo '<script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script>'.PHP_EOL;
-	echo '<script type="text/javascript">'.PHP_EOL;
-	echo 'var pageTracker = _gat._getTracker("XX-XXXXXXX-X");'.PHP_EOL;
-	echo 'pageTracker._trackPageview();'.PHP_EOL;
-	echo '</script>'.PHP_EOL;
-}
-
 # The new, asynchronous way
 function add_google_analytics_async(){
 	echo "<script type='text/javascript'>".PHP_EOL."
 		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'XX-XXXXXXX-X']);
+		_gaq.push(['_setAccount', '". GOOGLE_ANALYTICS_ID ."']);
 		_gaq.push(['_trackPageview']);
 		(function() {
 		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

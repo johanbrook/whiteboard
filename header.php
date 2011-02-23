@@ -28,7 +28,7 @@
 <link rel="apple-touch-icon-precomposed" href="/iOS-icon.png"/>
 
 <!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="<?php bloginfo("stylesheet_directory"); ?>/style/js/html5.js"></script>
 <![endif]-->
 	 
 <!--[if IE]>
