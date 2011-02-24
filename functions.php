@@ -204,7 +204,7 @@ register_taxonomy("portfolio-type", "portfolio",
 *	Wrapper function for linking to pages.
 */
 function link_to($page){
-	echo get_bloginfo("url")."/$page";
+	echo get_permalink(get_ID_by_slug($page));
 }
 
 
@@ -215,6 +215,19 @@ function link_to($page){
 function img($filename){
 	echo get_bloginfo("stylesheet_directory")."/style/images/".$filename;
 }
+
+/**
+*	Returns the ID from a slug
+*/
+function get_id_by_slug($page_slug) {
+    $page = get_page_by_path($page_slug);
+    if ($page) {
+        return $page->ID;
+    } else {
+        return null;
+    }
+}
+
 
 
 /**
