@@ -83,8 +83,8 @@ if ( !is_admin() ) {
 
 	# I use a local copy of jQuery in dev mode.
 
-	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"), false, "1.5", true);
-	#wp_register_script('jquery', ($dir . "jquery-1.5.min.js"), false, "1.5", true);
+	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5", true);
+	#wp_register_script('jquery', ($dir . "jquery-1.5.1.min.js"), false, "1.5.1", true);
 	wp_enqueue_script('jquery');
 }
 
@@ -228,6 +228,12 @@ function get_id_by_slug($page_slug) {
     }
 }
 
+
+/* Use the actual short URL in shortlinks */
+add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
+function my_shortlink( $link, $shortlink, $text, $title ){
+	return $shortlink;
+}
 
 
 /**
@@ -427,11 +433,7 @@ function browser_body_class($classes) {
 }	
 
 
-/* Use the actual short URL in shortlinks */
-add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
-function my_shortlink( $link, $shortlink, $text, $title ){
-	return $shortlink;
-}
+
 
 
 /**
