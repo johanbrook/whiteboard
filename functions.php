@@ -1,9 +1,51 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Dyluni
- * Written by Johan Brook except where noted.
+/*
+ 	THE MAIN FUNCTIONS FILE	
+ 
+	Written by Johan Brook except where noted.
+ 	
+	//-style comments are my explanations and tips.
+	#-style comments are for you to take action on (remove/let be)
+	
  */
+
+
+
+/* SETUP
+------------------------------------------------------*/
+
+// Defines a constant containing the absolute path to the theme 
+// directory. Using 'bloginfo' all the time queries the database.
+
+define("JB_TEMPLATE_DIR", get_bloginfo("stylesheet_directory"));
+define("JB_JS_DIR", JB_TEMPLATE_DIR . "/style/js/");
+define("JB_IMG_DIR", JB_TEMPLATE_DIR . "/style/images/");
+define("JB_CSS_DIR", JB_TEMPLATE_DIR . "/style/css/");
+
+// Include the helpers:
+
+require_once "library/helpers.inc.php";
+
+
+
+// Add theme support for stuff
+
+add_theme_support("post-thumbnails");
+add_theme_support("menus");
+
+
+// RSS for everything:
+automatic_feed_links();
+
+
+// Styles for the post/page editor in wp-admin. You can of course point this to any CSS file.
+
+add_editor_style("style/css/editor-style.css");
+
+
+// Nav menus
+
+#register_nav_menu( 'main-nav', 'Main navigation' );
 
 
 
@@ -12,26 +54,25 @@
 
 /* Google Analytics */
 
-# Fill in your Google Analytics tracking code:
+// Fill in your Google Analytics tracking code:
 define("GOOGLE_ANALYTICS_ID", "XX-XXXXXXX-X");
 
-# Adds asynchronous Google Analytics to the <head> tag. Uncomment in production!:
+// Adds asynchronous Google Analytics to the <head> tag. Uncomment in production!:
 
 #add_action('wp_head', 'add_google_analytics_async');
 
 
-automatic_feed_links();
-add_editor_style("style/css/editor-style.css");
-
-add_theme_support("post-thumbnails");
-add_theme_support("menus");
-
-# Replace with your own dimensions
+/* Post thumbnail sizes */
 
 set_post_thumbnail_size(588, 364, true);
 
+// Add more with the function 'add_image_size(String $name, int $width, int $height, bool $hardcrop)'
 
-/* end
+
+
+
+
+/* MISC
 ------------------------------------------------------*/
 
 // Clean up the <head>
@@ -49,19 +90,8 @@ function remove_head_links() {
 add_action('init', 'remove_head_links');
 
 
-# Custom header image
-#
-# Replace with your own values/dimensions!
 
-#define('HEADER_IMAGE', '%s/style/images/hero.png');
-#define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 980 ) );
-#define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 365 ) );
-#define('NO_HEADER_TEXT', true);
-
-#add_custom_image_header( '', 'admin_header_style' );
-
-
-// Add custom post types to RSS feed. Normally only regular posts are included.
+/* Add custom post types to RSS feed. Normally only regular posts are included. */
 
 function myfeed_request($qv) {
 	if (isset($qv['feed']) && !isset($qv['post_type']))
@@ -75,52 +105,27 @@ function myfeed_request($qv) {
 add_filter('request', 'myfeed_request');
 
 
-/*	JAVASCRIPT registrations.
+
+
+
+/*	jQUERY SETUP
 -------------------------------------------------*/
+
 if ( !is_admin() ) {
 	$dir = get_bloginfo("stylesheet_directory")."/style/js/";
 	wp_deregister_script('jquery');
 
-	# I use a local copy of jQuery in dev mode.
+	// I often use a local copy of jQuery in dev mode, included in the style/js directory.
 
-	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5", true);
+	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5.1", true);
 	#wp_register_script('jquery', ($dir . "jquery-1.5.1.min.js"), false, "1.5.1", true);
 	wp_enqueue_script('jquery');
 }
 
-add_action("wp_footer", "load_scripts");
-
-function load_scripts(){
-	$dir = get_bloginfo("stylesheet_directory")."/style/js/";
-
-	
-	$scripts = array(
-			array("dir" => $dir."jquery.hashgrid.js", 				"load" => "all"),
-			array("dir" => $dir."jquery.smoothscroll.min.js",		"load" => "all"),
-			array("dir" => $dir."dyluni.js",						"load" => "all")
-	);
-	
-	foreach($scripts as $key => $script){
-		if($script["load"] == "front"){
-			if(is_front_page()){
-				renderJS($script["dir"]);
-			}
-		}else if($script["load"] != "all" && is_page($script["load"])){
-			renderJS($script["dir"]);
-		}else if($script["load"] == "all"){
-			renderJS($script["dir"]);
-		}
-		
-	}
-
-}
-
-function renderJS($dir){
-	echo '<script type="text/javascript" src="'. $dir .'"></script>'.PHP_EOL;
-}
 
 
-/* WIDGETS
+
+/* SIDEBARS
 ----------------------------------------------*/
 
 if ( function_exists('register_sidebar') ) {
@@ -134,11 +139,19 @@ if ( function_exists('register_sidebar') ) {
 	));
 }
 
-/* CUSTOM POST TYPES */
-/*-----------------------------------------*/
+
+
+
+
+
+/* CUSTOM POST TYPES
+-------------------------------------------------*/
 
 add_action("init", "register_my_posttypes");
+
 function register_my_posttypes(){
+	
+	// Labels in wp-admin for your post type
 	$portfolio_labels = array(
 		"name" => "Portfolio items",
 		"singular_name" => "Portfolio item",
@@ -148,7 +161,8 @@ function register_my_posttypes(){
 		"view_item" => "View the item",
 		"not_found" => "No portfolio items"
 	);
-
+	
+	// The parameters. Please see the Codex for all options: http://codex.wordpress.org/Function_Reference/register_post_type
 	$portfolio_args = array(
 		"labels" => $portfolio_labels,
 		"public" => true,
@@ -162,200 +176,8 @@ function register_my_posttypes(){
 	#register_post_type("portfolio", $portfolio_args);
 }
 
-/* TAXONOMIES */
-/*-----------------------------------------*/
-
-/*
-$labels = array(
-	"singular_name" => "Type",
-	"search_items" => "Search types",
-	"popular_items" => "Most used types",
-	"all_items" => "All types",
-	"edit_item" => "Edit portfolio type",
-	"update_item" => "Update type",
-	"add_new_item" => "Add new portfolio type",
-	"new_item_name" => "New type name",
-	"separate_items_with_commas" => "Separate with commas",
-	"add_or_remove_items" => "Add or remove types"
-);
-
-register_taxonomy("portfolio-type", "portfolio",
-	array(
-		"label" => "Portfolio types",
-		"labels" => $labels,
-		"public" => true,
-		"query_var" => true,
-		"rewrite" => array("slug" => "type"),
-		"capabilities" => array("manage_terms", "edit_terms", "delete_terms")
-	));
-*/
-
-/* MENUS
-----------------------------------------*/
-
-#register_nav_menu( 'subnav', 'Sub navigation on pages' );
 
 
-
-/* HELPER FUNCTIONS
-----------------------------------------*/
-
-/**
-*	Wrapper function for linking to pages.
-*/
-function link_to($page){
-	echo get_permalink(get_ID_by_slug($page));
-}
-
-
-/**
-*	Makes it easier to use the img tag in HTML without having to write the whole bloginfo mess:
-*/
-
-function img($filename){
-	echo get_bloginfo("stylesheet_directory")."/style/images/".$filename;
-}
-
-/**
-*	Returns the ID from a slug
-*/
-function get_id_by_slug($page_slug) {
-    $page = get_page_by_path($page_slug);
-    if ($page) {
-        return $page->ID;
-    } else {
-        return null;
-    }
-}
-
-
-/* Use the actual short URL in shortlinks */
-add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
-function my_shortlink( $link, $shortlink, $text, $title ){
-	return $shortlink;
-}
-
-
-/**
-*	Makes Wordpress URLs root relative (from http://www.456bereastreet.com/archive/201010/how_to_make_wordpress_urls_root_relative/)
-*/
-
-function make_href_root_relative($input) {
-    return preg_replace('!http(s)?://' . $_SERVER['SERVER_NAME'] . '/!', '/', $input);
-}
-function root_relative_permalinks($input) {
-    return make_href_root_relative($input);
-}
-add_filter( 'the_permalink', 'root_relative_permalinks' );
-
-
-/**
-* Formats the pubdate of the post to remove the current year
-*/
-function the_time_spec(){
-	global $post;
-	$time = get_the_time("Y", $post->ID);
-	if($time == date("Y"))
-		echo get_the_time("F j", $post->ID);
-	else
-		echo get_the_time("F j, Y", $post->ID);
-}
-
-
-/**
-* Custom wrapper function to retrieve stuff from database quickly. Suitable for "Latest post" etc. in sidebars. 
-* @args $args - The arguments, as query string or array.
-*/
-function list_archives($args, $error_msg = "There are no posts yet."){
-	$items = get_posts($args);
-	if($items){
-		foreach($items as $item):?>
-			
-			<li><a href="<?php echo get_permalink($item->ID);?>"><?php echo $item->post_title;?></a></li>
-			
-		<?php endforeach;
-	}else{
-		echo '<li>'.$error_msg.'</li>';
-	}
-}
-
-
-/**
-*	Look for child pages
-*/
-
-function has_children(){
-	global $post;
-	$children = get_pages("child_of=".$post->ID);
-	
-	if($children || count($children) != 0)
-		return true;
-	else
-		return false;
-}
-
-/**
-*	Check if the page is a child page
-*/
-
-function is_child(){
-	global $post;
-	
-	if($post->post_parent){
-		$pages = get_pages("child_of=".$post->post_parent);
-		if($pages)	
-			return true;
-		else		
-			return false;
-	}
-}
-
-
-/**
-*	Simple function to check if there are shortcodes in the post's content:
-*/
-
-function has_shortcode($shortcode){
-	global $post;
-	if(strrpos($post->post_content, $shortcode))
-		return $shortcode;
-	else if(strrpos($post->post_content, $shortcode) === 0)
-		return $shortcode;
-	else
-		return false;
-}
-
-
-
-/**
- * Modifies a string to remove all non ASCII characters and spaces.
- */
-function slugify($text) {	
-    // replace non letter or digits by -
-    $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
- 
-    // trim
-    $text = trim($text, '-');
- 
-    // transliterate
-    if (function_exists('iconv'))
-    {
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-    }
- 
-    // lowercase
-    $text = strtolower($text);
- 
-    // remove unwanted characters
-    $text = preg_replace('~[^-\w]+~', '', $text);
- 
-    if (empty($text))
-    {
-        return 'n-a';
-    }
- 
-    return $text;
-}
 
 
 
