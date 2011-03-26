@@ -11,9 +11,6 @@ $(function($){
 	}, 100);
 	
 	
-	// Make a new grid overlay. See js/jquery.hashgrid.js for additional options
-	var grid = new hashgrid();
-	
 	// Set up smooth scrolling to text anchors
 	$("a").smoothScroll();
 	

@@ -7,6 +7,17 @@
 	//-style comments are my explanations and tips.
 	#-style comments are for you to take action on (remove/let be)
 	
+	Here you'll find:
+	
+	1. SETUP				Setting up constants, menus, editor styles and more.
+	2. CONFIGURATION		Where you probably want to poke around a bit. Some values to be set.
+	3. MISC					Some Wordpress spring cleaning and utility features.
+	4. jQUERY SETUP			Setting up and registrering jQuery the right way.
+	5. SIDEBARS				Adding sidebars.
+	6. CUSTOM POST TYPES	Adding a post type.
+	7. EXCERPTS				Some post excerpt tweaking.
+	8. GOOGLE ANALYTICS		Adding Google Analytics code to footer.
+	
  */
 
 
@@ -88,6 +99,9 @@ define("EXCERPT_LENGTH", 40);
 // your root domain. ('/some/page' instead of 'http://domain.com/your/page').
 
 define("USE_ROOT_RELATIVE_LINKS", true);
+
+// Register jQuery.
+define("USE_JQUERY", true);
 
 
 /* MISC
@@ -184,14 +198,13 @@ function browser_body_class($classes) {
 /*	jQUERY SETUP
 -------------------------------------------------*/
 
-if ( !is_admin() ) {
-	$dir = get_bloginfo("stylesheet_directory")."/style/js/";
+if ( !is_admin() && USE_JQUERY == true) {
 	wp_deregister_script('jquery');
 
 	// I often use a local copy of jQuery in dev mode, included in the style/js directory.
 
 	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5.1", true);
-	#wp_register_script('jquery', ($dir . "jquery-1.5.1.min.js"), false, "1.5.1", true);
+	#wp_register_script('jquery', (JB_JS_DIR . "jquery-1.5.1.min.js"), false, "1.5.1", true);
 	wp_enqueue_script('jquery');
 }
 

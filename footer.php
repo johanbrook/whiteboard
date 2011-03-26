@@ -13,6 +13,8 @@
 	
 		
 <?php wp_footer(); ?>
+<script src="<?php echo JB_JS_DIR;?>jquery.smoothscroll.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo JB_JS_DIR;?>dyluni.js" type="text/javascript" charset="utf-8"></script>
 
 </body>
 

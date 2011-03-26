@@ -22,14 +22,6 @@
 	<h2>Blog Archives</h2>
 	<?php } ?>
 
-		<?php if (show_posts_nav()) : ?>
-		<nav>
-			<ul>
-				<li><?php next_posts_link('&laquo; Older Entries') ?></li>
-				<li><?php previous_posts_link('Newer Entries &raquo;') ?></li>
-			</ul>
-		</nav>
-		<?php endif; ?>
 
 		<?php while (have_posts()) : the_post(); ?>
 			
