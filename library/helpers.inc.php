@@ -41,15 +41,35 @@ function link($text, $page){
 /**
 *	Wrapper function for including images with absolute paths in the theme.
 *
-*	@args String $filename: The name of the image. 
+*	@args String $filename: The name of the image file.
+*	@args Bool $echo: Echo (true) the string or return it (false).
 */
 
-function img($filename){
-	echo get_bloginfo("stylesheet_directory")."/style/images/".$filename;
+function img_src($filename, $echo = true){
+	if($echo)
+		echo JB_IMG_DIR . $filename;
+	else
+		return JB_IMG_DIR . $filename;
 }
 
+
 /**
-*	Returns the ID from a slug
+*	Builds an HTML image element and prints it.
+*
+*	@args String $filename: The name of the image file.
+*	@args String $alt: The alt attribute. Defaults to no alt attribute.
+*/
+function img($filename, $alt = ""){
+	$img = '<img src="%1$s" alt="%2$s" />';
+	
+	printf($img, img_src($filename, false), $alt);
+}
+
+
+/**
+*	Returns the ID of a page from the slug.
+*
+*	@args String $page_slug: The slug.
 */
 function get_id_by_slug($page_slug) {
     $page = get_page_by_path($page_slug);
@@ -60,46 +80,38 @@ function get_id_by_slug($page_slug) {
 }
 
 
-/* Use the actual short URL in shortlinks */
-add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
-function my_shortlink( $link, $shortlink, $text, $title ){
-	return $shortlink;
-}
 
 
 /**
-*	Makes Wordpress URLs root relative (from http://www.456bereastreet.com/archive/201010/how_to_make_wordpress_urls_root_relative/)
+* 	Related posts without plugin, based on tags and categories.
+*
+*	@args int $numberposts: How many posts to be shown. Defaults to 5.
+*	@return An unordered list of related posts.
 */
-
-function make_href_root_relative($input) {
-    return preg_replace('!http(s)?://' . $_SERVER['SERVER_NAME'] . '/!', '/', $input);
-}
-function root_relative_permalinks($input) {
-    return make_href_root_relative($input);
-}
-add_filter( 'the_permalink', 'root_relative_permalinks' );
-
-
-/**
-* Related posts without plugin
-*/
-function related_posts() {
+function the_related_posts($numberposts = 5) {
 	echo '<ul>';
         global $post;
         $tags = wp_get_post_tags($post->ID);
+
         if($tags) {
-        	foreach($tags as $tag) { $tag_arr .= $tag->slug . ','; }
-            	$args = array(
-            	'tag' => $tag_arr,
-            	'numberposts' => 5,
+        	foreach($tags as $tag) { $tag_string .= $tag->slug . ','; }
+            
+			$args = array(
+            	'tag' => $tag_string,
+            	'numberposts' => $numberposts,
             	'post__not_in' => array($post->ID)
-           		);
+           	);
+
            	$related_posts = get_posts($args);
            		if($related_posts) {
            			foreach ($related_posts as $post) : setup_postdata($post); ?>
-           		<li class="related_post"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
-         <?php endforeach; } else { ?>
-                <li class="no_related_post">No Related Posts Yet!</li>
+           		<li class="related-post"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+         <?php endforeach;
+				
+				} else { ?>
+                
+					<li class="no-related-posts">No Related Posts Yet!</li>
+
          <?php   }
 	}
 	wp_reset_query();
@@ -107,26 +119,11 @@ function related_posts() {
 }
 
 
-/**
-* Custom wrapper function to retrieve stuff from database quickly. Suitable for "Latest post" etc. in sidebars. 
-* @args $args - The arguments, as query string or array.
-*/
-function list_archives($args, $error_msg = "There are no posts yet."){
-	$items = get_posts($args);
-	if($items){
-		foreach($items as $item):?>
-			
-			<li><a href="<?php echo get_permalink($item->ID);?>"><?php echo $item->post_title;?></a></li>
-			
-		<?php endforeach;
-	}else{
-		echo '<li>'.$error_msg.'</li>';
-	}
-}
-
 
 /**
-*	Look for child pages
+*	Looks for child pages.
+*
+*	@return bool: True if the post/page has children.
 */
 
 function has_children(){
@@ -141,6 +138,8 @@ function has_children(){
 
 /**
 *	Check if the page is a child page
+*
+*	@return bool: True if the page is a child.
 */
 
 function is_child(){
@@ -155,48 +154,41 @@ function is_child(){
 	}
 }
 
-
 /**
-*	Simple function to check if there are shortcodes in the post's content:
-*/
-
-function has_shortcode($shortcode){
-	global $post;
-	if(strrpos($post->post_content, $shortcode))
-		return $shortcode;
-	else if(strrpos($post->post_content, $shortcode) === 0)
-		return $shortcode;
-	else
-		return false;
+ * Conditional Page/Post Navigation Links
+ * http://www.ericmmartin.com/conditional-pagepost-navigation-links-in-wordpress-redux/
+ * If more than one page exists, return TRUE.
+ */
+function show_posts_nav() {
+	global $wp_query;
+	return ($wp_query->max_num_pages > 1);
 }
 
 
 
 /**
- * Modifies a string to remove all non ASCII characters and spaces.
- */
+*	Make a string a 'slug', i.e. strip all non-ASCII characters, add hyphens for spaces etc.
+*
+*	@args String $text: The string to be slugified.
+*	@return String: The slug.
+*/
 function slugify($text) {	
-    // replace non letter or digits by -
+    // Replace non letter or digits by -
     $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
- 
-    // trim
     $text = trim($text, '-');
  
-    // transliterate
-    if (function_exists('iconv'))
-    {
+    // Transliterate
+    if (function_exists('iconv')) {
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
     }
  
-    // lowercase
     $text = strtolower($text);
  
-    // remove unwanted characters
+    // Remove unwanted characters
     $text = preg_replace('~[^-\w]+~', '', $text);
  
-    if (empty($text))
-    {
-        return 'n-a';
+    if (empty($text)){
+        return 'N/A';
     }
  
     return $text;

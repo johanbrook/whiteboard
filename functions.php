@@ -22,30 +22,42 @@ define("JB_JS_DIR", JB_TEMPLATE_DIR . "/style/js/");
 define("JB_IMG_DIR", JB_TEMPLATE_DIR . "/style/images/");
 define("JB_CSS_DIR", JB_TEMPLATE_DIR . "/style/css/");
 
+
 // Include the helpers:
 
 require_once "library/helpers.inc.php";
 
 
 
-// Add theme support for stuff
+/* Add theme support for stuff */
 
 add_theme_support("post-thumbnails");
 add_theme_support("menus");
 
 
-// RSS for everything:
+/* RSS for everything: */
 automatic_feed_links();
 
 
-// Styles for the post/page editor in wp-admin. You can of course point this to any CSS file.
+/* Styles for the post/page editor in wp-admin. You can of course point this to any CSS file. */
 
 add_editor_style("style/css/editor-style.css");
 
 
-// Nav menus
+/* Add custom login styles: */
+
+add_action("login_head", "custom_login_style");
+
+function didjit_login_style(){?>
+	<link rel="stylesheet" href="<?php echo JB_CSS_DIR; ?>login.css" type="text/css" media="screen" />
+<?php }
+
+
+
+/* Nav menus */
 
 #register_nav_menu( 'main-nav', 'Main navigation' );
+
 
 
 
@@ -69,13 +81,21 @@ set_post_thumbnail_size(588, 364, true);
 // Add more with the function 'add_image_size(String $name, int $width, int $height, bool $hardcrop)'
 
 
+// The size (in characters) of the post excertps.
+define("EXCERPT_LENGTH", 40);
 
+// Set to false to not use root relative links, i.e. the absolute URL instead of URLs relative to
+// your root domain. ('/some/page' instead of 'http://domain.com/your/page').
+
+define("USE_ROOT_RELATIVE_LINKS", true);
 
 
 /* MISC
 ------------------------------------------------------*/
 
-// Clean up the <head>
+
+/* Clean up the <head> */
+
 function remove_head_links() {
 	remove_action('wp_head', 'rsd_link');
 	remove_action('wp_head', 'wp_generator');
@@ -104,6 +124,59 @@ function myfeed_request($qv) {
 }
 add_filter('request', 'myfeed_request');
 
+
+/**
+*	Use the actual short URL in shortlinks.
+*
+*/
+add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
+function my_shortlink( $link, $shortlink, $text, $title ){
+	return $shortlink;
+}
+
+
+
+/**
+*	Makes Wordpress URLs root relative (from http://www.456bereastreet.com/archive/201010/how_to_make_wordpress_urls_root_relative/)
+*/
+
+function make_href_root_relative($input) {
+    return preg_replace('!http(s)?://' . $_SERVER['SERVER_NAME'] . '/!', '/', $input);
+}
+function root_relative_permalinks($input) {
+    return make_href_root_relative($input);
+}
+if(USE_ROOT_RELATIVE_LINKS == true){
+	add_filter( 'the_permalink', 'root_relative_permalinks' );
+}
+
+
+
+/**
+*	Adds the current browser as a class to the body tag. Handy for styling.
+*
+*/
+add_filter('body_class','browser_body_class');
+function browser_body_class($classes) {
+	global $is_lynx, $is_gecko, $is_IE, $is_opera, $is_safari, $is_chrome, $is_iphone;
+
+	$is_win = stripos($_SERVER["HTTP_USER_AGENT"], "windows");
+	
+	if($is_lynx) $classes[] = 'lynx';
+	elseif($is_gecko) $classes[] = 'gecko';
+	elseif($is_opera) $classes[] = 'opera';
+	elseif($is_safari) $classes[] = 'safari';
+	elseif($is_chrome) $classes[] = 'chrome';
+	elseif($is_IE) $classes[] = 'ie';
+	else $classes[] = 'unknown';
+
+	if($is_iphone) $classes[] = 'iphone';
+	
+	// Adds 'windows' to the body class
+	if($is_win !== false) $classes[] = 'windows';
+	
+	return $classes;
+}	
 
 
 
@@ -168,7 +241,7 @@ function register_my_posttypes(){
 		"public" => true,
 		"show_ui" => true,
 		"cabability_type" => "post",
-		"rewrite" => array("slug" => "work"),
+		"rewrite" => array("slug" => "portfolio"),
 		"description" => "My portfolio items",
 		"supports" => array("title", "editor", "custom-fields", "thumbnail", "excerpt")
 	);
@@ -178,102 +251,57 @@ function register_my_posttypes(){
 
 
 
-
-
+/* EXCERPTS
+-------------------------------------------------*/
 
 
 /**
- * Returns a "Continue Reading" link for excerpts
- *
- * @since Twenty Ten 1.0
- * @return string "Continue Reading" link
- */
-function twentyten_continue_reading_link() {
-	return '<a class="read-more" href="'. get_permalink() . '">' . 'Continue reading &rarr;' . '</a>';
+*	Sets the excerpt length. Stored in the EXCERPT_LENGTH constant.
+*/
+function jb_excerpt_length( $length ) {
+	return EXCERPT_LENGTH;
 }
+add_filter( 'excerpt_length', 'jb_excerpt_length' );
 
-add_filter( 'excerpt_more', 'twentyten_continue_reading_link' );
 
 /**
- * Adds a pretty "Continue Reading" link to custom post excerpts.
+ * Adds the "Read More" link to custom post excerpts.
  *
- * To override this link in a child theme, remove the filter and add your own
- * function tied to the get_the_excerpt filter hook.
- *
- * @since Twenty Ten 1.0
- * @return string Excerpt with a pretty "Continue Reading" link
+ * @return string Excerpt with "Read More" link in the end.
  */
-function twentyten_custom_excerpt_more( $output ) {
+function custom_excerpt( $output ) {
 	if ( has_excerpt() && ! is_attachment() ) {
-		$output .= twentyten_continue_reading_link();
+		$output .= read_more_link();
 	}
 	return $output;
 }
-add_filter( 'get_the_excerpt', 'twentyten_custom_excerpt_more' );
-
-function dyluni_excerpt_length( $length ) {
-	return 40;
-}
-add_filter( 'excerpt_length', 'dyluni_excerpt_length' );
-
-/**
- * Remove inline styles printed when the gallery shortcode is used.
- *
- * Galleries are styled by the theme in Twenty Ten's style.css.
- *
- * @since Twenty Ten 1.0
- * @return string The gallery style filter, with the styles themselves removed.
- */
-function twentyten_remove_gallery_css( $css ) {
-	return preg_replace( "#<style type='text/css'>(.*?)</style>#s", '', $css );
-}
-add_filter( 'gallery_style', 'twentyten_remove_gallery_css' );
-
+add_filter( 'get_the_excerpt', 'custom_excerpt' );
 
 
 /**
-*	Adds the current browser as a class to the body tag. Handy as hell for styling.
+* 	Returns a "Read more" link in excerpts
+*
+*	@args String $text: The text inside the link. Defaults to 'Read more'.
+*	@args String $class: The class attribute. Defaults to 'read-more'.
+*
+*	@return String: The formatted link with an ellipsis in the front.
 */
-add_filter('body_class','browser_body_class');
-function browser_body_class($classes) {
-	global $is_lynx, $is_gecko, $is_IE, $is_opera, $is_NS4, $is_safari, $is_chrome, $is_iphone;
+function read_more_link($text = "Read more", $class = "read-more") {
+	$link = '… <a class="%3$s" href="%2$s">%1$s</a>';
 	
-	$is_win = stripos($_SERVER["HTTP_USER_AGENT"], "windows");
-	
-	if($is_lynx) $classes[] = 'lynx';
-	elseif($is_gecko) $classes[] = 'gecko';
-	elseif($is_opera) $classes[] = 'opera';
-	elseif($is_NS4) $classes[] = 'ns4';
-	elseif($is_safari) $classes[] = 'safari';
-	elseif($is_chrome) $classes[] = 'chrome';
-	elseif($is_IE) $classes[] = 'ie';
-	else $classes[] = 'unknown';
-
-	if($is_iphone) $classes[] = 'iphone';
-	if($is_win !== false) $classes[] = 'windows';
-	return $classes;
-}	
-
-
-
-
-
-/**
- * Conditional Page/Post Navigation Links
- * http://www.ericmmartin.com/conditional-pagepost-navigation-links-in-wordpress-redux/
- * If more than one page exists, return TRUE.
- */
-function show_posts_nav() {
-	global $wp_query;
-	return ($wp_query->max_num_pages > 1);
+	return sprintf($link, $text, get_permalink(), $class);
 }
+
+add_filter( 'excerpt_more', 'read_more_link' );
+
+
 
 
 
 /* GOOGLE ANALYTICS
---------------------------------------*/
+--------------------------------------------------------*/
 
-# The new, asynchronous way
+// The new, asynchronous way
 function add_google_analytics_async(){
 	echo "<script type='text/javascript'>".PHP_EOL."
 		var _gaq = _gaq || [];
