@@ -192,7 +192,7 @@ function slugify($text) {
     $text = preg_replace('~[^-\w]+~', '', $text);
  
     if (empty($text)){
-        return 'N/A';
+        return false;
     }
  
     return $text;

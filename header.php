@@ -18,7 +18,7 @@
 <meta name="DC.title" content="<?php bloginfo("name"); ?>" />
 <meta name="DC.subject" content="<?php bloginfo("description");?>" />
 <meta name="DC.creator" content="Johan Brook" />
-<link type="text/plain" rel="author" href="<?php echo JB_TEMPLATE_DIR;?>humans.txt" />
+<link type="text/plain" rel="author" href="<?php echo JB_THEME_DIR;?>humans.txt" />
 	
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
