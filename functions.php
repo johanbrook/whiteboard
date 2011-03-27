@@ -59,7 +59,7 @@ add_editor_style("style/css/editor-style.css");
 
 add_action("login_head", "custom_login_style");
 
-function didjit_login_style(){?>
+function custom_login_style(){?>
 	<link rel="stylesheet" href="<?php echo JB_CSS_DIR; ?>login.css" type="text/css" media="screen" />
 <?php }
 

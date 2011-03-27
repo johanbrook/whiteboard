@@ -6,9 +6,20 @@ I encourage you to poke around in the files and remove stuff you don't need. I'v
 
 ## Constants
 
-A few constants are set in Whiteboard's functions file:
+Path constants:
 
-- `JB_THEME_DIR`. The absolute path to the theme 
+- `JB_THEME_DIR`. The absolute path to the theme directory. Could for example be: `http://domain.com/wordpress/wp-content/themes/<your-theme>`. This constant is preferrable over the `bloginfo("stylesheet_directory")`.
+- `JB_JS_DIR`. The absolute path to the Javascript directory. Defaults to `JB_THEME_DIR . /style/js/`.
+- `JB_IMG_DIR`. The absolute path to the images directory. Defaults to `JB_THEME_DIR . /style/images/`.
+- `JB_CSS_DIR`. The absolute path to the stylesheet directory. Defaults to `JB_THEME_DIR . /style/css/`.
+
+Some more configurable constants you should have a look at:
+
+- `GOOGLE_ANALYTICS_ID`. Your Google Analytics id. Fill it in and uncomment the `add_action(..)` row just below to add Analytics to the footer file.
+- `EXCERPT_LENGTH`. The global length in characters of post excerpts. Defaults to 40 characters.
+- `USE_ROOT_RELATIVE_LINKS`. Set to false if you don't want to use relative permalink ("/some/page/" instead of "http://domain.com/some/page/").
+- `USE_JQUERY`. Set to false to deactivate registration of the jQuery library in the theme.
+
 
 ## Helpers
 
@@ -97,4 +108,31 @@ Returns true if there's need to show a page navigation ("< Previous page, Next p
 	$slug = slugify($text);
 	
 	// Produces => 'this-is-a-text-string'.
+
+## Javascript
+
+There's no crazy use of Javascript built in – that's up to you to write – but some Javascript files are included. In the `style/js` directory you'll find:
+
+- `html5.js`. Self-hosted HTML5 Shim for IE 8 and below. Automatically included in the `<head>`. Rather than using Google's I prefer using a local copy. Why? Imagine if Google Code would go down – every IE user with or below 8.0 would see a broken site.
+
+## Other features
+
+### Partials
+
+Instead of writing the same template code over and over again, you should use partials. There's one partial included in Whiteboard – `post.php` – which is the main post template. It's included with the `get_template_part("partials/_post")` construct. I encourage you to use partials (put them in the partials directory) whenever you find yourself writing the same code twice or more.
+
+### Body classes
+Whiteboard's functions file automatically adds browser names to the theme's `body` class. This means you're able to target specific browsers in your CSS and Javascripts. Ex. if a user running Firefox visits the site, the body class looks like `<body class="firefox">`. Also supports the iPhone body class.
+	
+	
+### Real shortlinks
+
+Whiteboard uses **real** shortlinks when using the Wordpress template tag `the_shortlink()`, i.e. it outputs the raw URL rather than a pre-built link element.
+
+
+### Custom backend styles
+
+Automatically adds references to `editor-style.css`, where CSS styles for the visual editor in wp-admin goes, as well as `login.css` which lets you style the login screen (`wp-login.php`).
+
+
 
