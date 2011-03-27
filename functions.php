@@ -28,10 +28,10 @@
 /* Defines a constant containing the absolute path to theme
  directories. Using 'bloginfo' all the time is tough on the database.*/
 
-define("JB_THEME_DIR", get_bloginfo("stylesheet_directory"));
-define("JB_JS_DIR", JB_THEME_DIR . "/style/js/");
-define("JB_IMG_DIR", JB_THEME_DIR . "/style/images/");
-define("JB_CSS_DIR", JB_THEME_DIR . "/style/css/");
+define("JB_THEME_DIR", get_bloginfo("stylesheet_directory") . "/");
+define("JB_JS_DIR", JB_THEME_DIR . "static/js/");
+define("JB_IMG_DIR", JB_THEME_DIR . "static/images/");
+define("JB_CSS_DIR", JB_THEME_DIR . "static/css/");
 
 
 // Include the helpers:
