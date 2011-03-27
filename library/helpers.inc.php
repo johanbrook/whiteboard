@@ -29,7 +29,7 @@ function link_to($page, $echo = true){
 *	@args String $text: The text inside the link
 *	@args String $page: The slug of the page you're linking to.
 */
-function link($text, $page){
+function build_link($text, $page){
 	$format = '<a href="%2$s">%1$s</a>';
 		
 	printf($format, $text, link_to($page, false));
