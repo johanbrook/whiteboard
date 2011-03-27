@@ -101,19 +101,34 @@ Returns true if there's need to show a page navigation ("< Previous page, Next p
 	
 ### `slugify($text)`
 
-"Slugifies" a text string, i.e. the function replaces spaces for hyphens, and non-ASCII characters for their equivalents.
+"Slugifies" a text string, i.e. the function replaces spaces for hyphens, and non-ASCII characters for their equivalents, and makes it all lowercase.
 
 	// In template:
 	$text = "This is a text string"
 	$slug = slugify($text);
 	
-	// Produces => 'this-is-a-text-string'.
+	// $slug => 'this-is-a-text-string'.
+	
+## HTML
 
-## Javascript
+The theme's HTML is valid HTML5, complete with ARIA roles for accessability.  
+
+
+## Javascripts
 
 There's no crazy use of Javascript built in – that's up to you to write – but some Javascript files are included. In the `style/js` directory you'll find:
 
 - `html5.js`. Self-hosted HTML5 Shim for IE 8 and below. Automatically included in the `<head>`. Rather than using Google's I prefer using a local copy. Why? Imagine if Google Code would go down – every IE user with or below 8.0 would see a broken site.
+- `jquery-1.5.1.min.js`. Local copy of jQuery 1.5.1.
+- `jquery.hashgrid.js`. Superb grid tool. Sets up a customizable (through CSS) grid overlay which can be shown with the 'G' key. More info on [http://hashgrid.com](http://hashgrid.com/). 
+- `jquery.retina.js`. If you're targeting the iPhone 4, this handy script will replace all regular images on your site with (by you created) high-res images named after Apple's "@2x" convention.
+- `jquery.smoothscroll.js`. Smoothscroll on anchor links. Automatically loaded.
+- `whiteboard.js`. The main script file. Automatically loaded. Put your custom code and setup functions here.
+
+## CSS
+
+Whiteboard is a Wordpress theme template only – there's no boilerplate CSS included. For that I recommend you to have a look at my [Sass framework](https://github.com/johanbrook/dyluni "Dyluni Framework"). However, in the `style/css` directory, there are styles for the visual editor in wp-admin, styles for the login screen, and several patch files for IE.
+
 
 ## Other features
 

@@ -1,4 +1,4 @@
-<?php global $is_gecko, $is_IE, $is_opera, $is_safari, $is_chrome, $is_iphone;?>
+<?php global $is_gecko, $is_IE;?>
 
 <form role="search" action="<?php bloginfo("home");?>" method="GET" id="searchform">
 	<input type="search" name="s" id="s" placeholder="Search and you will find" title="type keywords and press <enter>" size="30"
