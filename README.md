@@ -111,19 +111,40 @@ Returns true if there's need to show a page navigation ("< Previous page, Next p
 	
 ## HTML
 
-The theme's HTML is valid HTML5, complete with ARIA roles for accessability.  
+The theme's HTML is valid HTML5, complete with ARIA roles for accessibility. The theme's HTML structure (for a regular page, as an example) is as follows:
+
+	body
+	|__ header[role="banner"]
+		|__ hgroup
+			|__ h1 "Site title"
+			|__ h2 "Subtitle/Description"
+		|__ nav[role="navigation"]
+		
+	|__ section[role="main"]
+	    |__ article.page
+			|__ h1 "Page title"
+		
+	|__ footer[role="contentinfo"]
+	
+Not too hard to grasp. These selectors are invaluable to have when targeting elements from the CSS as well (instead of having IDs and class attributes set). As you see, it's in `section[role="main"]` the main content goes (duh). I also advise you to use the `body` element as the main container for the site, and use the `html` element for background image/color.
 
 
 ## Javascripts
 
 There's no crazy use of Javascript built in – that's up to you to write – but some Javascript files are included. In the `style/js` directory you'll find:
 
+- `whiteboard.js`. The main script file. Automatically loaded. Put your custom code and setup functions here.
 - `html5.js`. Self-hosted HTML5 Shim for IE 8 and below. Automatically included in the `<head>`. Rather than using Google's I prefer using a local copy. Why? Imagine if Google Code would go down – every IE user with or below 8.0 would see a broken site.
+	
+I've tossed a few handy libraries along with Whiteboard (lives in the library directory):
+
 - `jquery-1.5.1.min.js`. Local copy of jQuery 1.5.1.
 - `jquery.hashgrid.js`. Superb grid tool. Sets up a customizable (through CSS) grid overlay which can be shown with the 'G' key. More info on [http://hashgrid.com](http://hashgrid.com/). 
 - `jquery.retina.js`. If you're targeting the iPhone 4, this handy script will replace all regular images on your site with (by you created) high-res images named after Apple's "@2x" convention.
 - `jquery.smoothscroll.js`. Smoothscroll on anchor links. Automatically loaded.
-- `whiteboard.js`. The main script file. Automatically loaded. Put your custom code and setup functions here.
+- `modernizr-1.7.min.js`. See [Modernizr.com](http://www.modernizr.com/). Detects HTML5, CSS3 and other modern browser features.
+
+For more JS polyfills, please see [https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills).
 
 
 ### Global theme path variable

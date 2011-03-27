@@ -206,7 +206,7 @@ if ( !is_admin() && USE_JQUERY == true) {
 	// I often use a local copy of jQuery in dev mode, included in the style/js directory.
 
 	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5.1", true);
-	#wp_register_script('jquery', (JB_JS_DIR . "jquery-1.5.1.min.js"), false, "1.5.1", true);
+	#wp_register_script('jquery', (JB_JS_DIR . "library/jquery-1.5.1.min.js"), false, "1.5.1", true);
 	wp_enqueue_script('jquery');
 }
 

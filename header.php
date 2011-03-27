@@ -1,9 +1,3 @@
-<?php
-/**
- * @package WordPress
- * @subpackage Dyluni
- */
-?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
 
