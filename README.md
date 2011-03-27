@@ -125,6 +125,18 @@ There's no crazy use of Javascript built in – that's up to you to write – bu
 - `jquery.smoothscroll.js`. Smoothscroll on anchor links. Automatically loaded.
 - `whiteboard.js`. The main script file. Automatically loaded. Put your custom code and setup functions here.
 
+
+### Global theme path variable
+
+A thing I've used recently is the global Javascript variable `THEME_DIR`. In the footer, this variable is set to the path to the Wordpress theme directory, so you're able to reach theme files from within Javascript files, for example when writing Ajax functions which are talking to a PHP script in your theme:
+
+	// In whiteboard.js:
+	$.get(THEME_DIR + "server-script.php", {name: "John"}, function(data){
+		// Do stuff with data
+	});
+
+This means you don't have to hard code the theme directory into the Javascript code (which is very, very bad when you want to migrate or deploy your site). The `THEME_DIR` Javascript variable is the same as the `JB_THEME_DIR` PHP constant.
+
 ## CSS
 
 Whiteboard is a Wordpress theme template only – there's no boilerplate CSS included. For that I recommend you to have a look at my [Sass framework](https://github.com/johanbrook/dyluni "Dyluni Framework"). However, in the `style/css` directory, there are styles for the visual editor in wp-admin, styles for the login screen, and several patch files for IE.
