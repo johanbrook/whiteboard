@@ -1,25 +1,43 @@
-Dyluni for Wordpress
-====================
+# Whiteboard for Wordpress
 
-## Naked boilerplate HTML5 theme for Wordpress 3.x
+Whiteboard is "another naked, barebone, Wordpress theme", but still not quite. It serves as my starting point for every Wordpress project I'm starting working on, and includes an extensive library of nifty Wordpress helper functions.
 
-Hi! Thanks for checking this out. Dyluni for Wordpress is a naked theme for use in Wordpress projects, where you just want a totally clean theme to start out from. Its styling is based on my [Dyluni Framework](https://github.com/johanbrook/dyluni "Go to my Sass framework") (which makes use of Sass).
+I encourage you to poke around in the files and remove stuff you don't need. I've made the theme highly configurable and minimal, so you shouldn't have to remove too much.
 
-An ever so present note is that this is how *I* build my Wordpress sites – I'm not claiming that everything is 100% correct and most efficient, so therefore I'm gladly except suggestions.
+## Interesting files and directories
 
-## Crash course
+### `functions.php`
 
-The theme is written in HTML5, so you'll find the new semantic elements where appropriate. All the necessary theme files I use are included, as well as an extensive `functions.php`. I've tried to adhere to the different code standards and practices. 
+The heart of every Wordpress theme. In Whiteboard, `functions.php` serves as a config file where you register menus, widgets, sidebars and more. Constans are set and theme supports are added. In the "Configuration" section you're able to customize some values, and add your own.
 
-The theme got one template part (in the folder `partials`), `post.php` where the main post code lives. That one is used in index and archive files, as well as in `single.php`.
+### `library/helpers.inc.php`
 
-### Functions.php
+Helper functions. Included in `functions.php`. Put all your custom theme functions in here in order to keep things tidy. 
 
-In `functions.php` you'll find lots of handy Wordpress functions I personally can't live without. Note that once again this is my basic setup: go ahead and remove the stuff you don't need/want.
+Some handy, time-saving functions:
 
-## Dyluni Framework
+#### `link_to($page, [$echo = true])`
 
-I use my personal website boilerplate framework in this theme, [Dyluni](https://github.com/johanbrook/dyluni#readme), which relies on [Sass](http://sass-lang.com). Please go ahead and check it out; once you go Sass you'll never go back!
+Link to a Wordpress page by providing the slug name (Note: pretty permalinks must be setup).
 
-For production I recommend using `style-compressed.css` since it's way smaller than the uncompressed development version.
+Usage:
+	
+	// In template:
+	<a href="<?php link_to("about");?>">About me</a>
+	
+	// Produces:
+	<a href="http://domain.com/about/">About me</a>
 
+#### `build_link($text, $page)`
+
+Builds a complete <a> element with text and HREF attribute.
+	
+Usage:
+
+	// In template:
+	<?php build_link("About me", "about");
+	
+	// Produces:
+	<a href="http://domain.com/about/">About me</a>
+
+After some use, it's incredibly nice to having to write HTML links all the time.

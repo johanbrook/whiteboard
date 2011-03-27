@@ -9,13 +9,17 @@
 /**
 *	Wrapper function for linking to pages.
 *
-*	@args String $page: The slug of the page you're linking to
+*	@args String/int $page: The slug or ID of the page you're linking to
 *	@args bool $echo: Prints (true) or returns (false) the permalink.
 *
 *	Usage: <a href="<?php link_to('about');?>">About me</a>
 */
 function link_to($page, $echo = true){
-	$link = get_permalink(get_ID_by_slug($page));
+	if(is_string($page))
+		$page = get_ID_by_slug($page);
+	
+	$link = get_permalink($page);
+
 	if($echo && $link)
 		echo $link;
 	else
@@ -27,7 +31,7 @@ function link_to($page, $echo = true){
 *	Builds a HTML link element and prints it.
 *
 *	@args String $text: The text inside the link
-*	@args String $page: The slug of the page you're linking to.
+*	@args String/int $page: The slug or ID of the page you're linking to.
 */
 function build_link($text, $page){
 	$format = '<a href="%2$s">%1$s</a>';
