@@ -25,8 +25,8 @@
 /* SETUP
 ------------------------------------------------------*/
 
-// Defines a constant containing the absolute path to the theme 
-// directory. Using 'bloginfo' all the time queries the database.
+/* Defines a constant containing the absolute path to theme
+ directories. Using 'bloginfo' all the time is tough on the database.*/
 
 define("JB_TEMPLATE_DIR", get_bloginfo("stylesheet_directory"));
 define("JB_JS_DIR", JB_TEMPLATE_DIR . "/style/js/");
@@ -102,6 +102,8 @@ define("USE_ROOT_RELATIVE_LINKS", true);
 
 // Register jQuery.
 define("USE_JQUERY", true);
+
+
 
 
 /* MISC
@@ -215,14 +217,14 @@ if ( !is_admin() && USE_JQUERY == true) {
 ----------------------------------------------*/
 
 if ( function_exists('register_sidebar') ) {
-	register_sidebar(array(
+	/*register_sidebar(array(
 		'name' => "Global sidebar",
 		'id' => 'global',
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget' => '</section',
 		'before_title' => '<h2>',
 		'after_title' => '</h2>',
-	));
+	));*/
 }
 
 
@@ -261,6 +263,8 @@ function register_my_posttypes(){
 	
 	#register_post_type("portfolio", $portfolio_args);
 }
+
+
 
 
 
