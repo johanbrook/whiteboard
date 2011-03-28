@@ -2,7 +2,7 @@
 *	Custom Javascript functions
 *
 */
-if(!window.jQuery) alert("jQuery is currently not loaded! Whiteboard.js, amongst others, depends on it.");
+
 
 $(function($){
 	
