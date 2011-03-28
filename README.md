@@ -186,4 +186,51 @@ Whiteboard uses **real** shortlinks when using the Wordpress template tag `the_s
 Automatically adds references to `editor-style.css`, where CSS styles for the visual editor in wp-admin goes, as well as `login.css` which lets you style the login screen (`wp-login.php`).
 
 
+## General security tips
 
+### Place Wordpress in its own directory.
+
+Don't keep Wordpress directly in the web root. The web root is usually `public_html` or some other name if you're using a subdomain. It's a security concern – any naughty individual could guess your whole Wordpress installation structure with ease (which isn't optimal). Personally, I find it cluttering with all Wordpress core files in my web root as well.
+
+The solution is to put the whole Wordpress core in a separate directory (`core`, for instance) and put an `index.php` in the web root which "starts up" Wordpress:
+
+	public_html/
+		index.php
+		-- core/
+			-- wp-admin/
+			-- wp-content/
+			-- etc, etc.
+
+In `index.php` it should say:
+
+	<?php
+	/**
+	 * Front to the WordPress application. This file doesn't do anything, but loads
+	 * wp-blog-header.php which does and tells WordPress to load the theme.
+	 *
+	 * @package WordPress
+	 */
+
+	/**
+	 * Tells WordPress to load the WordPress theme and output it.
+	 *
+	 * @var bool
+	 */
+	define('WP_USE_THEMES', true);
+
+	/** Loads the WordPress Environment and Template */
+	require('./core/wp-blog-header.php');
+	?>
+	
+Change `core` in the `require('./wordpress/wp-blog-header.php');` line to the name of the sub-directory you keep Wordpress in. More info may be found in the [Wordpress Codex page about this topic](http://codex.wordpress.org/Giving_WordPress_Its_Own_Directory). 
+
+### Protecting wp-config.php
+
+wp-config.php is an important file, since it contains sensitive stuff about the database, and more. To prevent anyone to view the contents of wp-config, put this in your `.htaccess` file:
+
+	<files wp-config.php>
+		order allow,deny
+		deny from all
+	</files>
+	
+Double-check the path to your installation's wp-config.php. More info at [http://www.devlounge.net/code/protect-your-wordpress-wp-config-so-you-dont-get-hacked](http://www.devlounge.net/code/protect-your-wordpress-wp-config-so-you-dont-get-hacked). I've included a `.htaccess` file in this theme with the code above.

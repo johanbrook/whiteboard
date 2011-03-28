@@ -1,0 +1,22 @@
+# Suggestion on contents of your .htaccess file. 
+#
+# DON'T just put this file in your web root, since it'll overwrite Wordpress' own .htaccess stuff.
+# Simply paste the contents below into the already existing .htaccess, below Wordpress' redirecting code.
+
+
+
+# SECURE WP-CONFIG.PHP
+# Change 'core' below to the name of your Wordpress directory. If you keep the Wordpress
+# files directly under the web root, simply remove 'core/'.
+
+#<files core/wp-config.php>
+#order allow,deny
+#deny from all
+#</files>
+
+# PROTECT THE .HTACCESS FILE
+
+#<files .htaccess>
+#	order allow,deny
+#	deny from all
+#</files>
