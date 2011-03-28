@@ -1,21 +1,21 @@
 # Whiteboard for Wordpress
 
-Whiteboard is "another naked, barebone, Wordpress theme", but still not quite. It serves as my starting point for every Wordpress project I'm starting working on, and includes an extensive library of nifty Wordpress helper functions.
+Whiteboard is "another naked, barebone, Wordpress theme", but still not quite. It serves as the starting point for every Wordpress project I start working on, and includes an extensive library of nifty Wordpress helper functions.
 
-I encourage you to poke around in the files and remove stuff you don't need. I've made the theme highly configurable and minimal, so you shouldn't have to remove too much.
+I encourage you to poke around in the files and remove stuff you don't need.
 
 ## Constants
 
-Path constants:
+URL constants:
 
-- `JB_THEME_DIR`. The absolute path to the theme directory. Could for example be: `http://domain.com/wordpress/wp-content/themes/<your-theme>`. This constant is preferrable over the `bloginfo("stylesheet_directory")`.
-- `JB_JS_DIR`. The absolute path to the Javascript directory. Defaults to `JB_THEME_DIR . /style/js/`.
-- `JB_IMG_DIR`. The absolute path to the images directory. Defaults to `JB_THEME_DIR . /style/images/`.
-- `JB_CSS_DIR`. The absolute path to the stylesheet directory. Defaults to `JB_THEME_DIR . /style/css/`.
+- `JB_THEME_DIR`. The absolute URL to the theme directory. Could for example be: `http://domain.com/wordpress/wp-content/themes/<your-theme>/`. This constant is preferrable over calling the `bloginfo("stylesheet_directory")` all the time.
+- `JB_JS_DIR`. The absolute URL to the Javascript directory. Defaults to `JB_THEME_DIR . static/js/`.
+- `JB_IMG_DIR`. The absolute URL to the images directory. Defaults to `JB_THEME_DIR . static/images/`.
+- `JB_CSS_DIR`. The absolute URL to the stylesheet directory. Defaults to `JB_THEME_DIR . static/css/`.
 
 Some more configurable constants you should have a look at:
 
-- `GOOGLE_ANALYTICS_ID`. Your Google Analytics id. Fill it in and uncomment the `add_action(..)` row just below to add Analytics to the footer file.
+- `GOOGLE_ANALYTICS_ID`. Your Google Analytics id. Fill it in and uncomment the `add_action(..)` row just below to add Analytics to the footer.
 - `EXCERPT_LENGTH`. The global length in characters of post excerpts. Defaults to 40 characters.
 - `USE_ROOT_RELATIVE_LINKS`. Set to false if you don't want to use relative permalink ("/some/page/" instead of "http://domain.com/some/page/").
 - `USE_JQUERY`. Set to false to deactivate registration of the jQuery library in the theme.
@@ -23,7 +23,7 @@ Some more configurable constants you should have a look at:
 
 ## Helpers
 
-Helper functions. Included in `functions.php`. Put all your custom theme functions in here in order to keep things tidy. 
+Helper functions. Included in `library/helpers.inc.php`. Put all your custom theme functions in here in order to keep things tidy. 
 
 Some handy, time-saving functions:
 
@@ -39,7 +39,7 @@ Link to a Wordpress page by providing the slug name (Note: a pretty permalink st
 
 ### `build_link($text, $page)`
 
-Builds a complete <a> element with text and HREF attribute.
+Builds a complete `<a>` element with text and href attribute.
 
 	// In template:
 	<?php build_link("About me", "about");
@@ -111,7 +111,7 @@ Returns true if there's need to show a page navigation ("< Previous page, Next p
 	
 ## HTML
 
-The theme's HTML is valid HTML5, complete with ARIA roles for accessibility. The theme's HTML structure (for a regular page, as an example) is as follows:
+The theme's HTML is valid HTML5, complete with ARIA roles for accessibility. The theme's HTML structure (for a regular page, for example) is as follows:
 
 	body
 	|__ header[role="banner"]
@@ -136,7 +136,7 @@ There's no crazy use of Javascript built in – that's up to you to write – bu
 - `whiteboard.js`. The main script file. Automatically loaded. Put your custom code and setup functions here.
 - `html5.js`. Self-hosted HTML5 Shim for IE 8 and below. Automatically included in the `<head>`. Rather than using Google's I prefer using a local copy. Why? Imagine if Google Code would go down – every IE user with or below 8.0 would see a broken site.
 	
-I've tossed a few handy libraries along with Whiteboard (lives in the library directory):
+I've tossed a few handy libraries along with Whiteboard (lives in the `static/js/library` directory):
 
 - `jquery-1.5.1.min.js`. Local copy of jQuery 1.5.1.
 - `jquery.hashgrid.js`. Superb grid tool. Sets up a customizable (through CSS) grid overlay which can be shown with the 'G' key. More info on [http://hashgrid.com](http://hashgrid.com/). 
@@ -154,6 +154,9 @@ A thing I've used recently is the global Javascript variable `THEME_DIR`. In the
 	// In whiteboard.js:
 	$.get(THEME_DIR + "server-script.php", {name: "John"}, function(data){
 		// Do stuff with data
+		
+		// Very handy when inserting external images as well:
+		$(this).after("<img src='"+ THEME_DIR +"static/images/loader.gif' />");
 	});
 
 This means you don't have to hard code the theme directory into the Javascript code (which is very, very bad when you want to migrate or deploy your site). The `THEME_DIR` Javascript variable is the same as the `JB_THEME_DIR` PHP constant.
@@ -167,7 +170,7 @@ Whiteboard is a Wordpress theme template only – there's no boilerplate CSS inc
 
 ### Partials
 
-Instead of writing the same template code over and over again, you should use partials. There's one partial included in Whiteboard – `post.php` – which is the main post template. It's included with the `get_template_part("partials/_post")` construct. I encourage you to use partials (put them in the partials directory) whenever you find yourself writing the same code twice or more.
+Instead of writing the same template code over and over again, you should use partials. There's one partial included in Whiteboard – `post.php` – which is the main post template. It's included with the `get_template_part("partials/_post")` construct. I advise you to use partials (put them in the partials directory) whenever you find yourself writing the same code twice or more.
 
 ### Body classes
 Whiteboard's functions file automatically adds browser names to the theme's `body` class. This means you're able to target specific browsers in your CSS and Javascripts. Ex. if a user running Firefox visits the site, the body class looks like `<body class="firefox">`. Also supports the iPhone body class.
