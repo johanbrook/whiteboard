@@ -44,10 +44,7 @@ require_once "library/helpers.inc.php";
 
 add_theme_support("post-thumbnails");
 add_theme_support("menus");
-
-
-/* RSS for everything: */
-automatic_feed_links();
+add_theme_support('automatic-feed-links');
 
 
 /* Styles for the post/page editor in wp-admin. You can of course point this to any CSS file. */
@@ -117,7 +114,6 @@ function remove_head_links() {
 	remove_action('wp_head', 'wp_generator');
 	remove_action('wp_head', 'index_rel_link');
 	remove_action('wp_head', 'wlwmanifest_link');
-	remove_action('wp_head', 'feed_links', 2);
 	remove_action('wp_head', 'feed_links_extra', 3);
 	remove_action('wp_head', 'start_post_rel_link', 10, 0);
 	remove_action('wp_head', 'parent_post_rel_link', 10, 0);
