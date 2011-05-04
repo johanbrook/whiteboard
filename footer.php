@@ -19,11 +19,10 @@
 	
 	if(!window.jQuery){		
 		console.log("Notice: Whiteboard can't load jQuery from the Google CDN. Falling back to local copy.");
-		document.write("<script src='<?php echo JB_JS_DIR;?>library/jquery-1.5.1.min.js'>\x3C/script>")
+		document.write("<script src='<?php echo JB_JS_DIR;?>library/jquery.min.js'>\x3C/script>")
 	}
 </script>
-<script src="<?php echo JB_JS_DIR;?>library/jquery.smoothscroll.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo JB_JS_DIR;?>whiteboard.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo JB_JS_DIR;?>all.min.js" type="text/javascript" charset="utf-8"></script>
 
 </body>
 

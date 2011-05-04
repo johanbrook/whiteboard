@@ -25,7 +25,6 @@
 	<?php if(is_single()):?>
 		<footer>
 			<p><?php previous_post_link('&laquo; %link') ?> <?php next_post_link('%link &raquo;') ?></p>
-			<p>Tagged <?php the_tags("", ", ", ""); ?></p>
 		</footer>
 	<?php endif;?>
 
