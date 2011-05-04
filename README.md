@@ -138,7 +138,7 @@ There's no crazy use of Javascript built in – that's up to you to write – bu
 	
 I've tossed a few handy libraries along with Whiteboard (lives in the `static/js/library` directory):
 
-- `jquery-1.5.1.min.js`. Local copy of jQuery 1.5.1.
+- `jquery.min.js`. Local copy of jQuery.
 - `jquery.hashgrid.js`. Superb grid tool. Sets up a customizable (through CSS) grid overlay which can be shown with the 'G' key. More info on [http://hashgrid.com](http://hashgrid.com/). 
 - `jquery.retina.js`. If you're targeting the iPhone 4, this handy script will replace all regular images on your site with (by you created) high-res images named after Apple's "@2x" convention.
 - `jquery.smoothscroll.js`. Smoothscroll on anchor links. Automatically loaded.

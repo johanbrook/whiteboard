@@ -3,6 +3,8 @@
 	
 	==========================
 	
+	/* TEAM */
+	
 	PROJECT LEAD
 	John Doe
 	http://johndoe.com
@@ -19,9 +21,9 @@
 	@janey
 	
 	
+	/* SITE */
 	
 	Date: 2011-02-23
-	Client: Intergalactic Space Empire
 	
 	TECHNOLOGIES
 	- Built with Wordpress
