@@ -1,6 +1,6 @@
 <?php
 
-/* HELPER FUNCTIONS 
+/* HELPER FUNCTIONS
 	For inclusion in 'functions.php'
 ----------------------------------------*/
 
@@ -17,7 +17,7 @@
 function link_to($page, $echo = true){
 	if(is_string($page))
 		$page = get_ID_by_slug($page);
-	
+
 	$link = get_permalink($page);
 
 	if($echo && $link)
@@ -35,7 +35,7 @@ function link_to($page, $echo = true){
 */
 function build_link($text, $page){
 	$format = '<a href="%2$s">%1$s</a>';
-		
+
 	printf($format, $text, link_to($page, false));
 }
 
@@ -65,7 +65,7 @@ function img_src($filename, $echo = true){
 */
 function img($filename, $alt = ""){
 	$img = '<img src="%1$s" alt="%2$s" />';
-	
+
 	printf($img, img_src($filename, false), $alt);
 }
 
@@ -99,7 +99,7 @@ function the_related_posts($numberposts = 5) {
 
         if($tags) {
         	foreach($tags as $tag) { $tag_string .= $tag->slug . ','; }
-            
+
 			$args = array(
             	'tag' => $tag_string,
             	'numberposts' => $numberposts,
@@ -111,9 +111,9 @@ function the_related_posts($numberposts = 5) {
            			foreach ($related_posts as $post) : setup_postdata($post); ?>
            		<li class="related-post"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
          <?php endforeach;
-				
+
 				} else { ?>
-                
+
 					<li class="no-related-posts">No Related Posts Yet!</li>
 
          <?php   }
@@ -133,7 +133,7 @@ function the_related_posts($numberposts = 5) {
 function has_children(){
 	global $post;
 	$children = get_pages("child_of=".$post->ID);
-	
+
 	if($children || count($children) != 0)
 		return true;
 	else
@@ -148,12 +148,12 @@ function has_children(){
 
 function is_child(){
 	global $post;
-	
+
 	if($post->post_parent){
 		$pages = get_pages("child_of=".$post->post_parent);
-		if($pages)	
+		if($pages)
 			return true;
-		else		
+		else
 			return false;
 	}
 }
@@ -176,25 +176,25 @@ function show_posts_nav() {
 *	@args String $text: The string to be slugified.
 *	@return String: The slug.
 */
-function slugify($text) {	
+function slugify($text) {
     // Replace non letter or digits by -
     $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
     $text = trim($text, '-');
- 
+
     // Transliterate
     if (function_exists('iconv')) {
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
     }
- 
+
     $text = strtolower($text);
- 
+
     // Remove unwanted characters
     $text = preg_replace('~[^-\w]+~', '', $text);
- 
+
     if (empty($text)){
         return false;
     }
- 
+
     return $text;
 }
 
