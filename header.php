@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon-precomposed" href="<?php echo WB_IMG_DIR;?>iOS-icon.png"/>
 
 <!--[if lt IE 9]>
-<script src="<?php echo WB_JS_DIR;?>html5.js"></script>
+<script src="<?php echo WB_JS_DIR;?>library/html5.js"></script>
 <![endif]-->
 	 
 <!--[if IE]>
