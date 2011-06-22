@@ -3,20 +3,6 @@
  	THE MAIN FUNCTIONS FILE	
  
 	Written by Johan Brook except where noted.
- 	
-	//-style comments are my explanations and tips.
-	#-style comments are for you to take action on (remove/let be)
-	
-	Here you'll find:
-	
-	1. SETUP				Setting up constants, menus, editor styles and more.
-	2. CONFIGURATION		Where you probably want to poke around a bit. Some values to be set.
-	3. MISC					Some Wordpress spring cleaning and utility features.
-	4. jQUERY SETUP			Setting up and registrering jQuery the right way.
-	5. SIDEBARS				Adding sidebars.
-	6. CUSTOM POST TYPES	Adding a post type.
-	7. EXCERPTS				Some post excerpt tweaking.
-	8. GOOGLE ANALYTICS		Adding Google Analytics code to footer.
 	
  */
 
@@ -28,44 +14,23 @@
 /* Defines a constant containing the absolute path to theme
  directories. Using 'bloginfo' all the time is tough on the database.*/
 
-define("JB_THEME_DIR", get_bloginfo("stylesheet_directory") . "/");
-define("JB_JS_DIR", JB_THEME_DIR . "static/js/");
-define("JB_IMG_DIR", JB_THEME_DIR . "static/images/");
-define("JB_CSS_DIR", JB_THEME_DIR . "static/css/");
+define("WB_THEME_DIR", get_template_directory_uri() . "/");
+define("WB_JS_DIR", WB_THEME_DIR . "resources/javascripts/");
+define("WB_IMG_DIR", WB_THEME_DIR . "resources/images/");
+define("WB_CSS_DIR", WB_THEME_DIR . "resources/stylesheets/");
 
 
-// Include the helpers:
+// Include resources:
 
-require_once "library/helpers.inc.php";
-
-
-
-/* Add theme support for stuff */
-
-add_theme_support("post-thumbnails");
-add_theme_support("menus");
-add_theme_support('automatic-feed-links');
+require_once "library/inc.helpers.php";
+require_once "library/class.Options.php";
+require_once "library/class.Metabox.php";
+	
+require_once "library/inc.settings.php";	
 
 
-/* Styles for the post/page editor in wp-admin. You can of course point this to any CSS file. */
-
-add_editor_style("style/css/editor-style.css");
-
-
-/* Add custom login styles: */
-
-add_action("login_head", "custom_login_style");
-
-function custom_login_style(){?>
-	<link rel="stylesheet" href="<?php echo JB_CSS_DIR; ?>login.css" type="text/css" media="screen" />
-<?php }
-
-
-
-/* Nav menus */
-
-#register_nav_menu( 'main-nav', 'Main navigation' );
-
+// Run setup:
+add_action("after_setup_theme", "projektforum_setup");
 
 
 
@@ -76,17 +41,6 @@ function custom_login_style(){?>
 
 // Fill in your Google Analytics tracking code:
 define("GOOGLE_ANALYTICS_ID", "XX-XXXXXXX-X");
-
-// Adds asynchronous Google Analytics to the <head> tag. Uncomment in production!:
-
-#add_action('wp_head', 'add_google_analytics_async');
-
-
-/* Post thumbnail sizes */
-
-set_post_thumbnail_size(588, 364, true);
-
-// Add more with the function 'add_image_size(String $name, int $width, int $height, bool $hardcrop)'
 
 
 // The size (in characters) of the post excertps.
@@ -103,6 +57,52 @@ define("USE_JQUERY", true);
 
 
 
+if(!function_exists("projektforum_setup")):
+	
+function projektforum_setup(){
+	
+		
+	add_action('init', 'remove_head_links');
+	add_action("init", "projektforum_posttypes");
+	
+	add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
+	add_filter('body_class','browser_body_class');
+	
+	add_filter( 'excerpt_length', 'jb_excerpt_length' );
+	add_filter( 'get_the_excerpt', 'custom_excerpt' );
+	add_filter( 'excerpt_more', 'read_more_link' );
+	
+	add_theme_support("post-thumbnails");
+	add_theme_support("menus");
+	add_theme_support('automatic-feed-links');
+	add_filter( 'show_admin_bar', '__return_false' );
+	
+	#add_action('wp_head', 'add_google_analytics_async');
+	
+	if(USE_ROOT_RELATIVE_LINKS == true){
+		add_filter( 'the_permalink', 'root_relative_permalinks' );
+	}
+	
+	/* Post thumbnail sizes */
+	set_post_thumbnail_size(456, 364, true);
+	
+	/* Used on front-page */
+	add_image_size("article-medium", 456, 282, true);
+	
+	/* Nav Menus */
+	register_nav_menus( array(
+		'main-nav' => __('Huvudnavigation'),
+		'footer-nav' => __("Sidfotsnavigation"),
+		'footer-links' => __("Länkar i sidfoten")
+	));
+
+		
+		
+}
+
+endif;
+
+
 /* MISC
 ------------------------------------------------------*/
 
@@ -114,17 +114,15 @@ function remove_head_links() {
 	remove_action('wp_head', 'wp_generator');
 	remove_action('wp_head', 'index_rel_link');
 	remove_action('wp_head', 'wlwmanifest_link');
-	remove_action('wp_head', 'feed_links_extra', 3);
 	remove_action('wp_head', 'start_post_rel_link', 10, 0);
 	remove_action('wp_head', 'parent_post_rel_link', 10, 0);
 	remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
 }
-add_action('init', 'remove_head_links');
 
 
 
 /* Add custom post types to RSS feed. Normally only regular posts are included. */
-
+/*
 function myfeed_request($qv) {
 	if (isset($qv['feed']) && !isset($qv['post_type']))
 		
@@ -135,13 +133,14 @@ function myfeed_request($qv) {
 	return $qv;
 }
 add_filter('request', 'myfeed_request');
+*/
+
 
 
 /**
 *	Use the actual short URL in shortlinks.
 *
 */
-add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
 function my_shortlink( $link, $shortlink, $text, $title ){
 	return $shortlink;
 }
@@ -158,9 +157,7 @@ function make_href_root_relative($input) {
 function root_relative_permalinks($input) {
     return make_href_root_relative($input);
 }
-if(USE_ROOT_RELATIVE_LINKS == true){
-	add_filter( 'the_permalink', 'root_relative_permalinks' );
-}
+
 
 
 
@@ -168,7 +165,6 @@ if(USE_ROOT_RELATIVE_LINKS == true){
 *	Adds the current browser as a class to the body tag. Handy for styling.
 *
 */
-add_filter('body_class','browser_body_class');
 function browser_body_class($classes) {
 	global $is_lynx, $is_gecko, $is_IE, $is_opera, $is_safari, $is_chrome, $is_iphone;
 
@@ -201,29 +197,10 @@ if ( !is_admin() && USE_JQUERY == true) {
 
 	// I often use a local copy of jQuery in dev mode, included in the style/js directory.
 
-	wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"), false, "1.5.1", true);
-	#wp_register_script('jquery', (JB_JS_DIR . "library/jquery-1.5.1.min.js"), false, "1.5.1", true);
+	#wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"), false, "1.6.1", true);
+	wp_register_script('jquery', (JB_JS_DIR . "library/jquery.min.js"), false, "1.6.1", true);
 	wp_enqueue_script('jquery');
 }
-
-
-
-
-/* SIDEBARS
-----------------------------------------------*/
-
-if ( function_exists('register_sidebar') ) {
-	/*register_sidebar(array(
-		'name' => "Global sidebar",
-		'id' => 'global',
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget' => '</section',
-		'before_title' => '<h2>',
-		'after_title' => '</h2>',
-	));*/
-}
-
-
 
 
 
@@ -231,9 +208,7 @@ if ( function_exists('register_sidebar') ) {
 /* CUSTOM POST TYPES
 -------------------------------------------------*/
 
-add_action("init", "register_my_posttypes");
-
-function register_my_posttypes(){
+function projektforum_posttypes(){
 	
 	// Labels in wp-admin for your post type
 	$portfolio_labels = array(
@@ -267,14 +242,13 @@ function register_my_posttypes(){
 /* EXCERPTS
 -------------------------------------------------*/
 
-
 /**
 *	Sets the excerpt length. Stored in the EXCERPT_LENGTH constant.
 */
 function jb_excerpt_length( $length ) {
 	return EXCERPT_LENGTH;
 }
-add_filter( 'excerpt_length', 'jb_excerpt_length' );
+
 
 
 /**
@@ -288,7 +262,6 @@ function custom_excerpt( $output ) {
 	}
 	return $output;
 }
-add_filter( 'get_the_excerpt', 'custom_excerpt' );
 
 
 /**
@@ -299,13 +272,13 @@ add_filter( 'get_the_excerpt', 'custom_excerpt' );
 *
 *	@return String: The formatted link with an ellipsis in the front.
 */
-function read_more_link($text = "Read more", $class = "read-more") {
-	$link = '… <a class="%3$s" href="%2$s">%1$s</a>';
+function read_more_link() {
+	$link = ' &hellip; <a class="read-more" href="%2$s">%1$s</a>';
 	
-	return sprintf($link, $text, get_permalink(), $class);
+	return sprintf($link, __("Läs mer"), get_permalink());
 }
 
-add_filter( 'excerpt_more', 'read_more_link' );
+
 
 
 

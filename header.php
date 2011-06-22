@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 
 <head>
@@ -12,22 +12,22 @@
 <meta name="DC.title" content="<?php bloginfo("name"); ?>" />
 <meta name="DC.subject" content="<?php bloginfo("description");?>" />
 <meta name="DC.creator" content="Johan Brook" />
-<link type="text/plain" rel="author" href="<?php echo JB_THEME_DIR;?>humans.txt" />
+<link type="text/plain" rel="author" href="<?php echo WB_THEME_DIR;?>humans.txt" />
 	
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" media="all" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 	
-<link rel="shortcut icon" href="<?php echo JB_IMG_DIR;?>favicon.png"/>	
-<link rel="apple-touch-icon-precomposed" href="<?php echo JB_IMG_DIR;?>iOS-icon.png"/>
+<link rel="shortcut icon" href="<?php echo WB_IMG_DIR;?>favicon.png"/>	
+<link rel="apple-touch-icon-precomposed" href="<?php echo WB_IMG_DIR;?>iOS-icon.png"/>
 
 <!--[if lt IE 9]>
-<script src="<?php echo JB_JS_DIR;?>html5.js"></script>
+<script src="<?php echo WB_JS_DIR;?>html5.js"></script>
 <![endif]-->
 	 
 <!--[if IE]>
-<link rel="stylesheet" href="<?php echo JB_CSS_DIR;?>patches/win-ie-all.css" media="all" />
+<link rel="stylesheet" href="<?php echo WB_CSS_DIR;?>patches/win-ie-all.css" media="all" />
 <![endif]-->
 
 <?php wp_head(); ?>
@@ -52,5 +52,5 @@
 		</nav>
 	</header>
 	
-	<section role="main">
+	<div role="main">
 	

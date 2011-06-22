@@ -8,10 +8,10 @@ I encourage you to poke around in the files and remove stuff you don't need.
 
 URL constants:
 
-- `JB_THEME_DIR`. The absolute URL to the theme directory. Could for example be: `http://domain.com/wordpress/wp-content/themes/<your-theme>/`. This constant is preferrable over calling the `bloginfo("stylesheet_directory")` all the time.
-- `JB_JS_DIR`. The absolute URL to the Javascript directory. Defaults to `JB_THEME_DIR . static/js/`.
-- `JB_IMG_DIR`. The absolute URL to the images directory. Defaults to `JB_THEME_DIR . static/images/`.
-- `JB_CSS_DIR`. The absolute URL to the stylesheet directory. Defaults to `JB_THEME_DIR . static/css/`.
+- `WB_THEME_DIR`. The absolute URL to the theme directory. Could for example be: `http://domain.com/wordpress/wp-content/themes/<your-theme>/`. This constant is preferrable over calling the `bloginfo("stylesheet_directory")` all the time.
+- `WB_JS_DIR`. The absolute URL to the Javascript directory. Defaults to `JB_THEME_DIR . static/js/`.
+- `WB_IMG_DIR`. The absolute URL to the images directory. Defaults to `JB_THEME_DIR . static/images/`.
+- `WB_CSS_DIR`. The absolute URL to the stylesheet directory. Defaults to `JB_THEME_DIR . static/css/`.
 
 Some more configurable constants you should have a look at:
 
