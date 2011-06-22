@@ -84,6 +84,13 @@ function get_id_by_slug($page_slug) {
 }
 
 
+/**
+*	Echoes a separator symbol wrapped in an element
+*
+*/
+function sep($symbol = "&middot;"){
+	echo '<span class="sep">'.$symbol.'</span>';
+}
 
 
 /**
@@ -120,6 +127,27 @@ function the_related_posts($numberposts = 5) {
 	}
 	wp_reset_query();
 	echo '</ul>';
+}
+
+
+
+/**
+*	Get options from the database
+*	(ties with a custom class, see library/class.Options.php)
+*
+*	@param String $option. The option name to fetch.
+*/
+function get_custom_option( $option ) {
+	$options = get_option( 'whiteboard_options' );
+	if ( isset( $options[$option] ) )
+		return $options[$option];
+	else
+		return false;
+}
+
+/* Shorthand echo of the above: */
+function wb_option($option){
+	echo get_custom_option($option);
 }
 
 
