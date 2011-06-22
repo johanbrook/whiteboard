@@ -48,7 +48,7 @@ namespace :javascript do
   task :concat => :whitespace do
     secretary = Sprockets::Secretary.new(
       :load_path => [WB_JS_DIR, File.join(WB_JS_DIR, "library")],
-      :source_files => [File.join(WB_JS_DIR, MAIN_JS_FILE)]
+      :source_files => [MAIN_JS_FILE]
     )
 
     title = (ENV["title"] == nil) ? "all.js" : ENV["title"]
