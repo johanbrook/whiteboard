@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside role="complementary">
 	
 	
 	

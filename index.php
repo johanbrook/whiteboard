@@ -6,7 +6,7 @@ get_header(); ?>
 
 	<?php while (have_posts()) : the_post(); ?>
 	
-		<?php get_template_part("partials/post");?>
+		<?php get_template_part("partials/_post");?>
 
 	<?php endwhile; ?>
 	

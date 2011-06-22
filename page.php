@@ -9,7 +9,7 @@ get_header(); ?>
 			<h1><?php the_title(); ?></h1>
 			
 			<div class="post-text">
-				<?php the_content('<p>Read the rest of this page &raquo;</p>'); ?>
+				<?php the_content(); ?>
 				<?php edit_post_link('Edit this page.', '<p>', '</p>'); ?>
 			</div>
 			

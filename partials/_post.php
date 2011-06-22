@@ -6,7 +6,7 @@
 
 ?>
 
-<article class="post">
+<article role="article">
 	<header>
 		<h1>
 			<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
@@ -19,7 +19,7 @@
 	
 	
 	<div class="post-text">	
-		<?php the_content('Read the rest of this entry &raquo;'); ?>
+		<?php the_content(); ?>
 	</div>
 	
 	<?php if(is_single()):?>
