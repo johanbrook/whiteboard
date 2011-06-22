@@ -30,7 +30,7 @@ require_once "library/inc.settings.php";
 
 
 // Run setup:
-add_action("after_setup_theme", "projektforum_setup");
+add_action("after_setup_theme", "whiteboard_setup");
 
 
 
@@ -57,43 +57,51 @@ define("USE_JQUERY", true);
 
 
 
-if(!function_exists("projektforum_setup")):
+if(!function_exists("whiteboard_setup")):
 	
-function projektforum_setup(){
+function whiteboard_setup(){
 	
 		
+	# Removes bloat from the <head>:
 	add_action('init', 'remove_head_links');
-	add_action("init", "projektforum_posttypes");
+	# Init custom post types (see callback function below)
+	add_action("init", "whiteboard_posttypes");
 	
+	# Return the actual shortlink
 	add_filter( 'the_shortlink', 'my_shortlink', 10, 4 );
+	
+	# Add handy browser classes to the body element
 	add_filter('body_class','browser_body_class');
 	
+	# Fine tune the excerpts
 	add_filter( 'excerpt_length', 'jb_excerpt_length' );
 	add_filter( 'get_the_excerpt', 'custom_excerpt' );
 	add_filter( 'excerpt_more', 'read_more_link' );
 	
+	# Add support for thumbnails, menus and RSS feed links
 	add_theme_support("post-thumbnails");
 	add_theme_support("menus");
 	add_theme_support('automatic-feed-links');
+	
+	# Disable the admin bar
 	add_filter( 'show_admin_bar', '__return_false' );
 	
+	# Add Google Analytics to the <head> (uncomment in production!)
 	#add_action('wp_head', 'add_google_analytics_async');
 	
 	if(USE_ROOT_RELATIVE_LINKS == true){
+		# Use root relative permalinks
 		add_filter( 'the_permalink', 'root_relative_permalinks' );
 	}
 	
 	/* Post thumbnail sizes */
 	set_post_thumbnail_size(456, 364, true);
-	
-	/* Used on front-page */
-	add_image_size("article-medium", 456, 282, true);
+	# Add more with 'add_image_size()'.
 	
 	/* Nav Menus */
 	register_nav_menus( array(
-		'main-nav' => __('Huvudnavigation'),
-		'footer-nav' => __("Sidfotsnavigation"),
-		'footer-links' => __("Länkar i sidfoten")
+		'main-nav' => __('Main navigation'),
+		'footer-nav' => __("Footer navigation"),
 	));
 
 		
@@ -118,22 +126,6 @@ function remove_head_links() {
 	remove_action('wp_head', 'parent_post_rel_link', 10, 0);
 	remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
 }
-
-
-
-/* Add custom post types to RSS feed. Normally only regular posts are included. */
-/*
-function myfeed_request($qv) {
-	if (isset($qv['feed']) && !isset($qv['post_type']))
-		
-		# Specify your custom post types here, including the standard "post"
-	
-		$qv['post_type'] = array('post', 'portfolio');
-		
-	return $qv;
-}
-add_filter('request', 'myfeed_request');
-*/
 
 
 
@@ -208,7 +200,7 @@ if ( !is_admin() && USE_JQUERY == true) {
 /* CUSTOM POST TYPES
 -------------------------------------------------*/
 
-function projektforum_posttypes(){
+function whiteboard_posttypes(){
 	
 	// Labels in wp-admin for your post type
 	$portfolio_labels = array(
