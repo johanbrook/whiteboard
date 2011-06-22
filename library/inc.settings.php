@@ -11,6 +11,9 @@ if(is_admin()){
 	/*- THEME OPTIONS SETUP
 	-------------------------------------------------*/
 	
+	/* First parameter is the name – prefix – of your options row in the database. 
+		Second parameter is an array (handle, title) with the different sections in the options page.
+	*/
 	$options = new Theme_Options("whiteboard", array(
 		array("handle" => "general", "title" => __("General settings"))
 	));
@@ -18,10 +21,26 @@ if(is_admin()){
 	
 	$general_text_standard = array(
 		"type" => "text",
-		"section" => "general",
+		"section" => "general",	// Corresponds to the 'general' section above
 		"desc" => ""
 	);
 	
+	/*
+		Add settings with the 'add_setting' method. First parameter is the identifier of the
+		setting – the string you call from your theme files. Second parameter is an array
+		with all options:
+		
+		'id'      => 'default_field',
+		'title'   => 'Default Field',
+		'desc'    => 'This is a default description.',
+		'std'     => '',
+		'type'    => 'text', (textarea || checkbox || radio || select)
+		'section' => 'general',	// Which section does the setting belong to?
+		'choices' => array(),	// Array. If 'type' is 'radio' or 'select'.
+		'class'   => ''
+	
+	
+	*/
 	$options->add_setting("frontpage-title", array(
 		"type" => "text",
 		"title" => __("Main heading on front page"),
