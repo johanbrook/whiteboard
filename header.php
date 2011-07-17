@@ -52,5 +52,4 @@
 		</nav>
 	</header>
 	
-	<div role="main">
 	

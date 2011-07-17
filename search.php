@@ -2,6 +2,8 @@
 
 get_header(); ?>
 
+<div role="main">
+
 	<?php if (have_posts()) : ?>
 
 		<h1>Search Results – found <?php echo $wp_query->found_posts;?> posts</h1>
@@ -27,5 +29,8 @@ get_header(); ?>
 		<?php get_search_form(); ?>
 
 	<?php endif; ?>
+
+</div>
+
 
 <?php get_footer(); ?>

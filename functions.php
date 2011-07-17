@@ -46,11 +46,6 @@ define("GOOGLE_ANALYTICS_ID", "XX-XXXXXXX-X");
 // The size (in characters) of the post excertps.
 define("EXCERPT_LENGTH", 40);
 
-// Set to false to not use root relative links, i.e. the absolute URL instead of URLs relative to
-// your root domain. ('/some/page' instead of 'http://domain.com/your/page').
-
-define("USE_ROOT_RELATIVE_LINKS", true);
-
 // Register jQuery.
 define("USE_JQUERY", true);
 
@@ -88,11 +83,6 @@ function whiteboard_setup(){
 	
 	# Add Google Analytics to the <head> (uncomment in production!)
 	#add_action('wp_head', 'add_google_analytics_async');
-	
-	if(USE_ROOT_RELATIVE_LINKS == true){
-		# Use root relative permalinks
-		add_filter( 'the_permalink', 'root_relative_permalinks' );
-	}
 	
 	/* Post thumbnail sizes */
 	set_post_thumbnail_size(456, 364, true);
@@ -139,19 +129,6 @@ function my_shortlink( $link, $shortlink, $text, $title ){
 
 
 
-/**
-*	Makes Wordpress URLs root relative (from http://www.456bereastreet.com/archive/201010/how_to_make_wordpress_urls_root_relative/)
-*/
-
-function make_href_root_relative($input) {
-    return preg_replace('!http(s)?://' . $_SERVER['SERVER_NAME'] . '/!', '/', $input);
-}
-function root_relative_permalinks($input) {
-    return make_href_root_relative($input);
-}
-
-
-
 
 /**
 *	Adds the current browser as a class to the body tag. Handy for styling.
@@ -189,7 +166,7 @@ if ( !is_admin() && USE_JQUERY == true) {
 
 	// I often use a local copy of jQuery in dev mode, included in the style/js directory.
 
-	#wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"), false, "1.6.1", true);
+	#wp_register_script('jquery', ("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"), false, "1.6.2", true);
 	wp_register_script('jquery', (WB_JS_DIR . "library/jquery.min.js"), false, "1.6.1", true);
 	wp_enqueue_script('jquery');
 }

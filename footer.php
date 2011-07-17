@@ -1,4 +1,4 @@
-	</div><!-- Main end -->
+
 
 	<footer role="contentinfo">
 
@@ -15,7 +15,7 @@
 <?php wp_footer(); ?>
 <script type="text/javascript">
 	// Sets a window variable to the theme's absolute path
-	window.Whiteboard = {
+	window.Config = {
 		theme_dir: "<?php echo WB_THEME_DIR;?>"
 	}
 	

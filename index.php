@@ -2,6 +2,8 @@
 
 get_header(); ?>
 
+<div role="main">
+	
 	<h1>This is from the theme options page: <em>"<?php wb_option("frontpage-title");?>"</em></h1>
 
 	<?php if (have_posts()) : ?>
@@ -28,6 +30,8 @@ get_header(); ?>
 			<?php get_search_form(); ?>
 
 	<?php endif; ?>
+
+</div>
 
 
 <?php get_footer(); ?>
